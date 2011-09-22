@@ -1,0 +1,45 @@
+{
+    "published": "2011-02-10T15:04:55Z",
+    "foo": "some extension property",
+    "generator": {
+	"url": "http://example.org/activities-app"
+    },
+    "provider": {
+	"url": "http://example.org/activity-stream"
+    },
+    "title": "Martin posted a new video to his album.",
+    "actor": {
+	"url": "http://example.org/martin",
+	"objectType": "person",
+	"id": "tag:example.org,2011:martin",
+	"foo2": "some other extension property",
+	"image": {
+	    "url": "http://example.org/martin/image",
+	    "width": 250,
+	    "height": 250
+	},
+	"displayName": "Martin Smith"
+    },
+    "verb": "post",
+    "object" : {
+	"url": "http://example.org/album/my_fluffy_cat.jpg",
+	"objectType": "photo",
+	"id": "tag:example.org,2011:my_fluffy_cat",
+	"image": {
+	    "url": "http://example.org/album/my_fluffy_cat_thumb.jpg",
+	    "width": 250,
+	    "height": 250
+	}
+    },
+    "target": {
+	"url": "http://example.org/album/",
+	"objectType": "photo-album",
+	"id": "tag:example.org,2011:abc123",
+	"displayName": "Martin's Photo Album",
+	"image": {
+	    "url": "http://example.org/album/thumbnail.jpg",
+	    "width": 250,
+	    "height": 250
+	}
+    }
+}
