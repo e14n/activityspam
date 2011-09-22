@@ -98,6 +98,7 @@ function updateNotSpamCount(r, token, spam_total, not_spam_total)
 				 Math.min(0.99,
 					  Math.min(1, b/spam_total)/
 					  (Math.min(1, g/not_spam_total) + Math.min(1, b/spam_total))));
+		console.log("Setting probability for token '" + token + "' to " + p.toString()); 
 		r.set('prob:'+token, p);
 	    }
 	});
@@ -107,6 +108,8 @@ function updateNotSpamCount(r, token, spam_total, not_spam_total)
 function updateSpamCounts(tokens, onSuccess)
 {
     var r = redis.createClient();
+    
+    console.log("Got " + tokens.length + " tokens to update");
 
     r.stream.on('connect', function() {
 	r.incr('spamtotal', function(err, spam_total) {
@@ -123,11 +126,14 @@ function updateSpamCounts(tokens, onSuccess)
 function updateNotSpamCounts(tokens, onSuccess)
 {
     var r = redis.createClient();
+    
+    console.log("Got " + tokens.length + " tokens to update");
 
     r.stream.on('connect', function() {
 	r.incr('notspamtotal', function(err, not_spam_total) {
 	    r.get('spamtotal', function(err, spam_total) {
 		for (i in tokens) { // Not sure I love this
+		    console.log("Update not spam count for " + tokens[i]);
 		    updateNotSpamCount(r, tokens[i], spam_total, not_spam_total);
 		}
 		onSuccess();
@@ -152,7 +158,7 @@ function getProbabilities(tokens, onSuccess)
 	    if (probs[i] == null) {
 		probabilities[i] = [tokens[i], 0.4];
 	    } else {
-		probabilities[i] = [tokens[i], probs[i]];
+		probabilities[i] = [tokens[i], parseFloat(probs[i])];
 	    }
 	}
 	onSuccess(probabilities);
@@ -193,7 +199,7 @@ function combineProbabilities(probs)
 
 function thisIsSpam(req, res, next) {
     var tokens = tokenize(req.body);
-    updateSpamCounts(tokens, function(counts) {
+    updateSpamCounts(tokens, function() {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.end(JSON.stringify("Thanks"));
     });
@@ -201,7 +207,7 @@ function thisIsSpam(req, res, next) {
 
 function thisIsNotSpam(req, res, next) {
     var tokens = tokenize(req.body);
-    updateNotSpamCounts(tokens, function(counts) {
+    updateNotSpamCounts(tokens, function() {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.end(JSON.stringify("Good to know"));
     });
