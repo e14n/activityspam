@@ -18,10 +18,41 @@
 
 var connect = require('connect');
 
-function tokenize(json)
+const BOUNDARY = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|]+/;
+const BOUNDARYG = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|]+/g;
+
+function tokenString(str)
+{
+    return str.replace(BOUNDARYG, '-');
+}
+
+function tokenArray(str)
+{
+    return str.split(BOUNDARY);
+}
+
+function tokenize(obj)
 {
     var tokens = [];
-    // TODO: actually tokenize
+    for (var prop in obj) {
+	var full = (arguments.length == 2) ? arguments[1]+'.'+prop : prop;
+	switch (typeof(obj[prop])) {
+	case "string":
+	    tokens.push(full+'='+tokenString(obj[prop]));
+	    tokens = tokens.concat(tokenArray(obj[prop]));
+	    break;
+	case "number":
+	case "boolean":
+	    tokens.push(full+'='+tokenString(obj[prop].toString()));
+	    break;
+	case "object":
+	    tokens = tokens.concat(tokenize(obj[prop], prop));
+	    break;
+	default:
+	    // XXX: loggit
+	    break;
+	}
+    }
     return tokens;
 }
 
@@ -104,6 +135,12 @@ function isThisSpam(req, res, next) {
     });
 }
 
+function testTokenize(req, res, next) {
+    var tokens = tokenize(req.body);
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.end(JSON.stringify(tokens));
+}
+
 server = connect.createServer(
     connect.logger(),
     connect.bodyParser(),
@@ -111,6 +148,7 @@ server = connect.createServer(
 	app.post('/is-this-spam', isThisSpam);
 	app.post('/this-is-spam', thisIsSpam);
 	app.post('/this-is-not-spam', thisIsNotSpam);
+	app.post('/tokenize', testTokenize);
     })
 );
 
