@@ -1,0 +1,37 @@
+This is an experimental server for filtering Activity Streams (http://activitystrea.ms/) data for spam.
+
+Apache 2.0 license.
+
+More or less copying "a plan for spam" filtering, but make pseudo-tokens for activity streams fields. So something like:
+
+     { id: "urn:uuid:7e4ed55a-2b99-48c8-a274-42819b2ddd39",
+       url: "http://example.net/status/35",
+       published: "2011-09-23T10:49:00Z",
+       actor: { displayName: "John Smith",
+       	      	id: "urn:uuid:bff0ecdd-a944-4d92-aed3-d6af8f13d610",
+		url: "http://example.net/status/johnsmith" },
+       verb: "post",
+       object: { id: "urn:uuid:81e43564-c66f-40c5-878b-733275229521",
+       	       	 type: "note",
+		 content: "<a href='http://example.com/viagra-spam'>Buy Viagra Now!</a>" } }
+
+Would tokenize as:
+
+      id=urn:uuid:7e4ed55a-2b99-48c8-a274-42819b2ddd39
+      url=http://example.net/status/35
+      published=2011-09-23T10:49:00Z
+      actor.displayName=John-Smith
+      actor.id=urn:uuid:bff0ecdd-a944-4d92-aed3-d6af8f13d610
+      actor.url=http://example.net/status/johnsmith
+      verb=post
+      object.id=urn:uuid:81e43564-c66f-40c5-878b-733275229521
+      object.type=note
+      a
+      href
+      http://example.com/viagra-spam
+      Buy
+      Viagra
+      Now
+      a
+
+There may be some value in grabbing the domains of URLs (example.com and example.net here).
