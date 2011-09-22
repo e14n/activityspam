@@ -17,6 +17,7 @@
 // limitations under the License.
 
 var connect = require('connect');
+var redis   = require('redis');
 
 const BOUNDARY = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|]+/;
 const BOUNDARYG = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|]+/g;
@@ -46,7 +47,7 @@ function tokenize(obj)
 	    tokens.push(full+'='+tokenString(obj[prop].toString()));
 	    break;
 	case "object":
-	    tokens = tokens.concat(tokenize(obj[prop], prop));
+	    tokens = tokens.concat(tokenize(obj[prop], full));
 	    break;
 	default:
 	    // XXX: loggit
@@ -56,11 +57,37 @@ function tokenize(obj)
     return tokens;
 }
 
+function updateSpamCount(r, token, spam_total, not_spam_total)
+{
+    r.incr('spam:'+token, function(err, spam_count) {
+	r.get('not-spam:'+token, function(err, not_spam_count) {
+	    var g = 2 * not_spam_count;
+	    var b = spam_count;
+	    if (g + b > 5) { // This will make id=... values kinda useless
+		var p = Math.max(0.01,
+				 Math.min(0.99,
+					  Math.min(1, b/spam_total)/
+					  (Math.min(1, g/not_spam_total) + Math.min(1, b/spam_total))));
+		r.set('prob:'+token, p);
+	    }
+	});
+    });
+}
+
 function updateSpamCounts(tokens, onSuccess)
 {
-    var counts = [];
-    // TODO: update counts
-    onSuccess(counts);
+    var r = redis.createClient();
+
+    r.stream.on('connect', function() {
+	r.incr('spamtotal', function(err, spam_total) {
+	    r.get('notspamtotal', function(err, not_spam_total) {
+		for (i in tokens) { // Not sure I love this
+		    updateSpamCount(r, tokens[i], spam_total, not_spam_total);
+		}
+		onSuccess();
+	    });
+	});
+    });
 }
 
 function updateSpamProbabilities(counts, onSuccess)
@@ -108,20 +135,16 @@ function combineProbabilities(probs)
 function thisIsSpam(req, res, next) {
     var tokens = tokenize(req.body);
     updateSpamCounts(tokens, function(counts) {
-	updateSpamProbabilities(counts, function(probs) {
-	    res.writeHead(200, {'Content-Type': 'application/json'});
-	    res.end(JSON.stringify("Thanks"));
-	});
+	res.writeHead(200, {'Content-Type': 'application/json'});
+	res.end(JSON.stringify("Thanks"));
     });
 }
 
 function thisIsNotSpam(req, res, next) {
     var tokens = tokenize(req.body);
     updateNotSpamCounts(tokens, function(counts) {
-	updateNotSpamProbabilities(counts, function(probs) {
-	    res.writeHead(200, {'Content-Type': 'application/json'});
-	    res.end(JSON.stringify("Good to know"));
-	});
+	res.writeHead(200, {'Content-Type': 'application/json'});
+	res.end(JSON.stringify("Good to know"));
     });
 }
 
