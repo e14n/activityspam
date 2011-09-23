@@ -20,8 +20,22 @@ url = require('url');
 fs = require('fs');
 http = require('http');
 
-function postActivity(options, activity) {
+function postActivity(serverUrl, activity) {
+
     var results = '';
+    var toSend = JSON.stringify(activity);
+
+    var parts = url.parse(serverUrl);
+
+    var options = {
+	host: parts.hostname,
+	port: parts.port,
+	method: 'POST',
+	path: (parts.search) ? parts.pathname+'?'+parts.search : parts.pathname,
+	headers: {'content-type': 'application/json',
+		  'user-agent': 'postcollection.js/0.1.0dev',
+		  'content-length': toSend.length }
+    };
 
     req = http.request(options, function(res) {
 	res.on('data', function (chunk) {
@@ -48,19 +62,6 @@ if (process.argv.length != 4) {
 
 var fileName = process.argv[2];
 var serverUrl = process.argv[3];
-var parts = url.parse(serverUrl);
-
-var options = {
-    host: parts.hostname,
-    port: parts.port,
-    method: 'POST',
-    path: (parts.search) ? parts.pathname+'?'+parts.search : parts.pathname,
-    headers: ['Content-Type: application/json']
-};
-
-for (prop in options) {
-    console.log("options." + prop + " = " + options[prop]);
-}
 
 fs.readFile(fileName, function (err, data) {
 
@@ -72,8 +73,7 @@ fs.readFile(fileName, function (err, data) {
     var collection = JSON.parse(data);
 
     for (i in collection.items) {
-	activity = collection.items[i];
-	postActivity(options, activity);
+	postActivity(serverUrl, collection.items[i]);
     }
 });
 
