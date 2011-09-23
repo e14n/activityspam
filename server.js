@@ -1,4 +1,3 @@
-// server.js
 //
 // main function for activity spam checker
 //
@@ -117,32 +116,24 @@ function updateNotSpamCount(r, token, spam_total, not_spam_total)
 
 function updateSpamCounts(tokens, onSuccess)
 {
-    var r = redis.createClient();
-    
-    r.stream.on('connect', function() {
-	r.incr('spamtotal', function(err, spam_total) {
-	    r.get('notspamtotal', function(err, not_spam_total) {
-		for (i in tokens) { // Not sure I love this
-		    updateSpamCount(r, tokens[i], spam_total, not_spam_total);
-		}
-		onSuccess();
-	    });
+    r.incr('spamtotal', function(err, spam_total) {
+	r.get('notspamtotal', function(err, not_spam_total) {
+	    for (i in tokens) { // Not sure I love this
+		updateSpamCount(r, tokens[i], spam_total, not_spam_total);
+	    }
+	    onSuccess();
 	});
     });
 }
 
 function updateNotSpamCounts(tokens, onSuccess)
 {
-    var r = redis.createClient();
-    
-    r.stream.on('connect', function() {
-	r.incr('notspamtotal', function(err, not_spam_total) {
-	    r.get('spamtotal', function(err, spam_total) {
-		for (i in tokens) { // Not sure I love this
-		    updateNotSpamCount(r, tokens[i], spam_total, not_spam_total);
-		}
-		onSuccess();
-	    });
+    r.incr('notspamtotal', function(err, not_spam_total) {
+	r.get('spamtotal', function(err, spam_total) {
+	    for (i in tokens) { // Not sure I love this
+		updateNotSpamCount(r, tokens[i], spam_total, not_spam_total);
+	    }
+	    onSuccess();
 	});
     });
 }
@@ -154,8 +145,6 @@ function getProbabilities(tokens, onSuccess)
 	probkeys.push('prob:'+tokens[i]);
     }
     
-    var r = redis.createClient();
-
     r.mget(probkeys, function(err, probs) {
 	probabilities = [];
 	for (i in tokens) {
@@ -249,4 +238,8 @@ server = connect.createServer(
     })
 );
 
-server.listen(process.env.PORT || 8001);
+var r = redis.createClient();
+    
+r.stream.on('connect', function() {
+    server.listen(process.env.PORT || 8001);
+});
