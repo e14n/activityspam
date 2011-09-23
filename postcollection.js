@@ -20,8 +20,21 @@ url = require('url');
 fs = require('fs');
 http = require('http');
 
-function postActivity(options, activity) {
+function postActivity(serverUrl, activity) {
     var results = '';
+    var toSend = JSON.stringify(activity);
+    var parts = url.parse(serverUrl);
+
+    var options = {
+	host: parts.hostname,
+	port: parts.port,
+	method: 'POST',
+	path: (parts.search) ? parts.pathname+'?'+parts.search : parts.pathname,
+	headers: {'content-type': 'application/json',
+		  'user-agent': 'postcollection.js/0.1.0dev',
+		  'connection': 'keep-alive', 
+		  'content-length': toSend.length.toString()}
+    };
 
     req = http.request(options, function(res) {
 	res.on('data', function (chunk) {
@@ -36,9 +49,9 @@ function postActivity(options, activity) {
 	console.log("Problem with activity " + activity.id + ": " + e.message);
     });
 
-    req.write(JSON.stringify(activity));
+    req.write(toSend);
     req.end();
-    console.log("posted " + activity.id);
+    console.log("posted " + activity.id + " (" + toSend.length + " chars)");
 }
 
 if (process.argv.length != 4) {
@@ -48,19 +61,6 @@ if (process.argv.length != 4) {
 
 var fileName = process.argv[2];
 var serverUrl = process.argv[3];
-var parts = url.parse(serverUrl);
-
-var options = {
-    host: parts.hostname,
-    port: parts.port,
-    method: 'POST',
-    path: (parts.search) ? parts.pathname+'?'+parts.search : parts.pathname,
-    headers: ['Content-Type: application/json']
-};
-
-for (prop in options) {
-    console.log("options." + prop + " = " + options[prop]);
-}
 
 fs.readFile(fileName, function (err, data) {
 
@@ -72,8 +72,7 @@ fs.readFile(fileName, function (err, data) {
     var collection = JSON.parse(data);
 
     for (i in collection.items) {
-	activity = collection.items[i];
-	postActivity(options, activity);
+	postActivity(serverUrl, collection.items[i]);
     }
 });
 
