@@ -1,4 +1,3 @@
-//
 // main function for activity spam checker
 //
 // Copyright 2011, StatusNet Inc.
@@ -24,7 +23,7 @@ const BOUNDARYG = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|\-_]+/g;
 // Training and measuring values
 
 const RELEVANCE_CUTOFF = 15;
-const MINIMUM_OCCURENCES = 15;
+const MINIMUM_OCCURENCES = 5;
 const MINPROB = 0.01;
 const MAXPROB = 0.99;
 const DEFAULT_PROB = 0.4; // default probability for unseen values
