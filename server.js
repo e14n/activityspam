@@ -19,8 +19,8 @@
 var connect = require('connect');
 var redis   = require('redis');
 
-const BOUNDARY = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|]+/;
-const BOUNDARYG = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|]+/g;
+const BOUNDARY = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|\-_]+/;
+const BOUNDARYG = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|\-_]+/g;
 
 function tokenString(str)
 {
@@ -39,8 +39,10 @@ function tokenize(obj)
 	var full = (arguments.length == 2) ? arguments[1]+'.'+prop : prop;
 	switch (typeof(obj[prop])) {
 	case "string":
-	    tokens.push(full+'='+tokenString(obj[prop]));
-	    tokens = tokens.concat(tokenArray(obj[prop]));
+	    var parts = tokenArray(obj[prop]);
+	    tokens = tokens.concat(parts);
+	    var prefixed = parts.map(function(part) { return full + '=' + part; });
+	    tokens = tokens.concat(prefixed);
 	    break;
 	case "number":
 	case "boolean":
