@@ -29,7 +29,7 @@ function tokenString(str)
 
 function tokenArray(str)
 {
-    return str.split(BOUNDARY);
+    return str.split(BOUNDARY).filter(function (s) { return (s.length > 0) });
 }
 
 function tokenize(obj)
