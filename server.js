@@ -22,6 +22,15 @@ var redis   = require('redis');
 const BOUNDARY = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|\-_]+/;
 const BOUNDARYG = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|\-_]+/g;
 
+// Training and measuring values
+
+const RELEVANCE_CUTOFF = 15;
+const MINIMUM_OCCURENCES = 15;
+const MINPROB = 0.01;
+const MAXPROB = 0.99;
+const DEFAULT_PROB = 0.4; // default probability for unseen values
+const SPAM_PROB = 0.90; // cutoff for saying is or isn't
+
 function tokenString(str)
 {
     return str.replace(BOUNDARYG, '-');
@@ -78,9 +87,9 @@ function updateSpamCount(r, token, spam_total, not_spam_total)
 	r.get('not-spam:'+token, function(err, not_spam_count) {
 	    var g = 2 * not_spam_count;
 	    var b = spam_count;
-	    if (g + b > 5) { // This will make id=... values kinda useless
-		var p = Math.max(0.01,
-				 Math.min(0.99,
+	    if (g + b > MINIMUM_OCCURENCES) { // This will make id=... values kinda useless
+		var p = Math.max(MINPROB,
+				 Math.min(MAXPROB,
 					  Math.min(1, b/spam_total)/
 					  (Math.min(1, g/not_spam_total) + Math.min(1, b/spam_total))));
 		r.set('prob:'+token, p);
@@ -96,11 +105,10 @@ function updateNotSpamCount(r, token, spam_total, not_spam_total)
 	    var g = 2 * not_spam_count;
 	    var b = spam_count;
 	    if (g + b > 5) {
-		var p = Math.max(0.01,
-				 Math.min(0.99,
+		var p = Math.max(MINPROB,
+				 Math.min(MAXPROB,
 					  Math.min(1, b/spam_total)/
 					  (Math.min(1, g/not_spam_total) + Math.min(1, b/spam_total))));
-		console.log("Setting probability for token '" + token + "' to " + p.toString()); 
 		r.set('prob:'+token, p);
 	    }
 	});
@@ -158,7 +166,7 @@ function getProbabilities(tokens, onSuccess)
 	for (i in tokens) {
 	    // There's probably a nicer data structure for this
 	    if (probs[i] == null) {
-		probabilities[i] = [tokens[i], 0.4];
+		probabilities[i] = [tokens[i], DEFAULT_PROB];
 	    } else {
 		probabilities[i] = [tokens[i], parseFloat(probs[i])];
 	    }
@@ -182,8 +190,8 @@ function bestProbabilities(probs)
 	}
     });
 
-    // Get the best 15
-    return probs.slice(0, Math.min(probs.length, 15));
+    // Get the most relevant
+    return probs.slice(0, Math.min(probs.length, RELEVANCE_CUTOFF));
 }
 
 function combineProbabilities(probs)
@@ -196,7 +204,8 @@ function combineProbabilities(probs)
 	return coll * (1 - cur[1]);
     }, 1.0);
 
-    return (prod)/(prod + invprod); // really?
+    //bounded values
+    return Math.min(MAXPROB, Math.max(MINPROB, (prod)/(prod + invprod))); // really?
 }
 
 function thisIsSpam(req, res, next) {
@@ -221,7 +230,7 @@ function isThisSpam(req, res, next) {
 	var bestprobs = bestProbabilities(probs);
 	var prob = combineProbabilities(bestprobs);
 	var decision = { probability: prob,
-			 isSpam: ((prob > 0.90) ? true : false),
+			 isSpam: ((prob > SPAM_PROB) ? true : false),
 			 bestKeys: bestprobs };
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.end(JSON.stringify(decision));
