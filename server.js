@@ -22,10 +22,10 @@ const BOUNDARYG = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|\-_]+/g;
 
 // Training and measuring values
 
-const RELEVANCE_CUTOFF = 15;
-const MINIMUM_OCCURENCES = 5;
-const MINPROB = 0.01;
-const MAXPROB = 0.99;
+const RELEVANCE_CUTOFF = 20;
+const MINIMUM_OCCURENCES = 3;
+const MINPROB = 0.0001;
+const MAXPROB = 0.9999;
 const DEFAULT_PROB = 0.4; // default probability for unseen values
 const SPAM_PROB = 0.90; // cutoff for saying is or isn't
 
@@ -229,6 +229,7 @@ function testTokenize(req, res, next) {
 server = connect.createServer(
     connect.logger(),
     connect.bodyParser(),
+    connect.errorHandler({showMessage: true}),
     connect.router(function(app){
 	app.post('/is-this-spam', isThisSpam);
 	app.post('/this-is-spam', thisIsSpam);
