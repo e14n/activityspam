@@ -119,8 +119,6 @@ function updateSpamCounts(tokens, onSuccess)
 {
     var r = redis.createClient();
     
-    console.log("Got " + tokens.length + " tokens to update");
-
     r.stream.on('connect', function() {
 	r.incr('spamtotal', function(err, spam_total) {
 	    r.get('notspamtotal', function(err, not_spam_total) {
@@ -137,13 +135,10 @@ function updateNotSpamCounts(tokens, onSuccess)
 {
     var r = redis.createClient();
     
-    console.log("Got " + tokens.length + " tokens to update");
-
     r.stream.on('connect', function() {
 	r.incr('notspamtotal', function(err, not_spam_total) {
 	    r.get('spamtotal', function(err, spam_total) {
 		for (i in tokens) { // Not sure I love this
-		    console.log("Update not spam count for " + tokens[i]);
 		    updateNotSpamCount(r, tokens[i], spam_total, not_spam_total);
 		}
 		onSuccess();
