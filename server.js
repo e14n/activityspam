@@ -1,5 +1,3 @@
-// server.js
-//
 // main function for activity spam checker
 //
 // Copyright 2011, StatusNet Inc.
@@ -19,8 +17,17 @@
 var connect = require('connect');
 var redis   = require('redis');
 
-const BOUNDARY = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|]+/;
-const BOUNDARYG = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|]+/g;
+const BOUNDARY = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|\-_]+/;
+const BOUNDARYG = /[ \n\r\t<>\/"\'.,!\?\(\)\[\]&:;=\\{}\|\-_]+/g;
+
+// Training and measuring values
+
+const RELEVANCE_CUTOFF = 20;
+const MINIMUM_OCCURENCES = 3;
+const MINPROB = 0.0001;
+const MAXPROB = 0.9999;
+const DEFAULT_PROB = 0.4; // default probability for unseen values
+const SPAM_PROB = 0.90; // cutoff for saying is or isn't
 
 function tokenString(str)
 {
@@ -29,7 +36,7 @@ function tokenString(str)
 
 function tokenArray(str)
 {
-    return str.split(BOUNDARY);
+    return str.split(BOUNDARY).filter(function (s) { return (s.length > 0) });
 }
 
 function tokenize(obj)
@@ -39,8 +46,10 @@ function tokenize(obj)
 	var full = (arguments.length == 2) ? arguments[1]+'.'+prop : prop;
 	switch (typeof(obj[prop])) {
 	case "string":
-	    tokens.push(full+'='+tokenString(obj[prop]));
-	    tokens = tokens.concat(tokenArray(obj[prop]));
+	    var parts = tokenArray(obj[prop]);
+	    tokens = tokens.concat(parts);
+	    var prefixed = parts.map(function(part) { return full + '=' + part; });
+	    tokens = tokens.concat(prefixed);
 	    break;
 	case "number":
 	case "boolean":
@@ -76,9 +85,9 @@ function updateSpamCount(r, token, spam_total, not_spam_total)
 	r.get('not-spam:'+token, function(err, not_spam_count) {
 	    var g = 2 * not_spam_count;
 	    var b = spam_count;
-	    if (g + b > 5) { // This will make id=... values kinda useless
-		var p = Math.max(0.01,
-				 Math.min(0.99,
+	    if (g + b > MINIMUM_OCCURENCES) { // This will make id=... values kinda useless
+		var p = Math.max(MINPROB,
+				 Math.min(MAXPROB,
 					  Math.min(1, b/spam_total)/
 					  (Math.min(1, g/not_spam_total) + Math.min(1, b/spam_total))));
 		r.set('prob:'+token, p);
@@ -94,8 +103,8 @@ function updateNotSpamCount(r, token, spam_total, not_spam_total)
 	    var g = 2 * not_spam_count;
 	    var b = spam_count;
 	    if (g + b > 5) {
-		var p = Math.max(0.01,
-				 Math.min(0.99,
+		var p = Math.max(MINPROB,
+				 Math.min(MAXPROB,
 					  Math.min(1, b/spam_total)/
 					  (Math.min(1, g/not_spam_total) + Math.min(1, b/spam_total))));
 		r.set('prob:'+token, p);
@@ -106,32 +115,24 @@ function updateNotSpamCount(r, token, spam_total, not_spam_total)
 
 function updateSpamCounts(tokens, onSuccess)
 {
-    var r = redis.createClient();
-
-    r.stream.on('connect', function() {
-	r.incr('spamtotal', function(err, spam_total) {
-	    r.get('notspamtotal', function(err, not_spam_total) {
-		for (i in tokens) { // Not sure I love this
-		    updateSpamCount(r, tokens[i], spam_total, not_spam_total);
-		}
-		onSuccess();
-	    });
+    r.incr('spamtotal', function(err, spam_total) {
+	r.get('notspamtotal', function(err, not_spam_total) {
+	    for (i in tokens) { // Not sure I love this
+		updateSpamCount(r, tokens[i], spam_total, not_spam_total);
+	    }
+	    onSuccess();
 	});
     });
 }
 
 function updateNotSpamCounts(tokens, onSuccess)
 {
-    var r = redis.createClient();
-
-    r.stream.on('connect', function() {
-	r.incr('notspamtotal', function(err, not_spam_total) {
-	    r.get('spamtotal', function(err, spam_total) {
-		for (i in tokens) { // Not sure I love this
-		    updateNotSpamCount(r, tokens[i], spam_total, not_spam_total);
-		}
-		onSuccess();
-	    });
+    r.incr('notspamtotal', function(err, not_spam_total) {
+	r.get('spamtotal', function(err, spam_total) {
+	    for (i in tokens) { // Not sure I love this
+		updateNotSpamCount(r, tokens[i], spam_total, not_spam_total);
+	    }
+	    onSuccess();
 	});
     });
 }
@@ -143,16 +144,14 @@ function getProbabilities(tokens, onSuccess)
 	probkeys.push('prob:'+tokens[i]);
     }
     
-    var r = redis.createClient();
-
     r.mget(probkeys, function(err, probs) {
 	probabilities = [];
 	for (i in tokens) {
 	    // There's probably a nicer data structure for this
 	    if (probs[i] == null) {
-		probabilities[i] = [tokens[i], 0.4];
+		probabilities[i] = [tokens[i], DEFAULT_PROB];
 	    } else {
-		probabilities[i] = [tokens[i], probs[i]];
+		probabilities[i] = [tokens[i], parseFloat(probs[i])];
 	    }
 	}
 	onSuccess(probabilities);
@@ -174,8 +173,8 @@ function bestProbabilities(probs)
 	}
     });
 
-    // Get the best 15
-    return probs.slice(0, Math.min(probs.length, 15));
+    // Get the most relevant
+    return probs.slice(0, Math.min(probs.length, RELEVANCE_CUTOFF));
 }
 
 function combineProbabilities(probs)
@@ -188,12 +187,13 @@ function combineProbabilities(probs)
 	return coll * (1 - cur[1]);
     }, 1.0);
 
-    return (prod)/(prod + invprod); // really?
+    //bounded values
+    return Math.min(MAXPROB, Math.max(MINPROB, (prod)/(prod + invprod))); // really?
 }
 
 function thisIsSpam(req, res, next) {
     var tokens = tokenize(req.body);
-    updateSpamCounts(tokens, function(counts) {
+    updateSpamCounts(tokens, function() {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.end(JSON.stringify("Thanks"));
     });
@@ -201,7 +201,7 @@ function thisIsSpam(req, res, next) {
 
 function thisIsNotSpam(req, res, next) {
     var tokens = tokenize(req.body);
-    updateNotSpamCounts(tokens, function(counts) {
+    updateNotSpamCounts(tokens, function() {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.end(JSON.stringify("Good to know"));
     });
@@ -213,7 +213,7 @@ function isThisSpam(req, res, next) {
 	var bestprobs = bestProbabilities(probs);
 	var prob = combineProbabilities(bestprobs);
 	var decision = { probability: prob,
-			 isSpam: ((prob > 0.90) ? true : false),
+			 isSpam: ((prob > SPAM_PROB) ? true : false),
 			 bestKeys: bestprobs };
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.end(JSON.stringify(decision));
@@ -229,6 +229,7 @@ function testTokenize(req, res, next) {
 server = connect.createServer(
     connect.logger(),
     connect.bodyParser(),
+    connect.errorHandler({showMessage: true}),
     connect.router(function(app){
 	app.post('/is-this-spam', isThisSpam);
 	app.post('/this-is-spam', thisIsSpam);
@@ -237,4 +238,8 @@ server = connect.createServer(
     })
 );
 
-server.listen(process.env.PORT || 8001);
+var r = redis.createClient();
+    
+r.stream.on('connect', function() {
+    server.listen(process.env.PORT || 8001);
+});

@@ -21,8 +21,10 @@ fs = require('fs');
 http = require('http');
 
 function postActivity(serverUrl, activity) {
+
     var results = '';
     var toSend = JSON.stringify(activity);
+
     var parts = url.parse(serverUrl);
 
     var options = {
@@ -31,9 +33,7 @@ function postActivity(serverUrl, activity) {
 	method: 'POST',
 	path: (parts.search) ? parts.pathname+'?'+parts.search : parts.pathname,
 	headers: {'content-type': 'application/json',
-		  'user-agent': 'postcollection.js/0.1.0dev',
-		  'connection': 'keep-alive', 
-		  'content-length': toSend.length.toString()}
+		  'user-agent': 'postcollection.js/0.1.0dev'}
     };
 
     req = http.request(options, function(res) {
