@@ -154,13 +154,14 @@ function updateNotSpamCounts(tokens, onSuccess) {
 
 function getProbabilities(tokens, onSuccess) {
     db.readAll('prob', tokens, function(err, probs) {
-        var i, probabilities = [];
+        var i, probabilities = [], token;
         for (i = 0; i < tokens.length; i++) {
+            token = tokens[i];
             // There's probably a nicer data structure for this
-            if (probs[i] === null) {
-                probabilities[i] = [tokens[i], DEFAULT_PROB];
+            if (probs[token] === null) {
+                probabilities.push([token, DEFAULT_PROB]);
             } else {
-                probabilities[i] = [tokens[i], parseFloat(probs[i])];
+                probabilities.push([token, probs[token]]);
             }
         }
         onSuccess(probabilities);
