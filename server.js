@@ -106,38 +106,38 @@ function uniq(arr) {
     return newArr;
 }
 
-function updateSpamCount(token, spam_total, not_spam_total) {
+function updateSpamCount(token, spam_total, ham_total) {
     db.incr('spam', token, function(err, spam_count) {
-        db.read('ham', token, function(err, not_spam_count) {
+        db.read('ham', token, function(err, ham_count) {
             if (err instanceof NoSuchThingError) {
-                not_spam_count = 0;
+                ham_count = 0;
             }
-            var g = 2 * not_spam_count;
+            var g = 2 * ham_count;
             var b = spam_count;
             if (g + b > MINIMUM_OCCURENCES) { // This will make id=... values kinda useless
                 var p = Math.max(MINPROB,
                                  Math.min(MAXPROB,
                                           Math.min(1, b/spam_total)/
-                                          (Math.min(1, g/not_spam_total) + Math.min(1, b/spam_total))));
+                                          (Math.min(1, g/ham_total) + Math.min(1, b/spam_total))));
                 db.save('prob', token, p, function(err, value) {});
             }
         });
     });
 }
 
-function updateNotSpamCount(token, spam_total, not_spam_total) {
-    db.incr('ham', token, function(err, not_spam_count) {
+function updateHamCount(token, spam_total, ham_total) {
+    db.incr('ham', token, function(err, ham_count) {
         db.read('spam', token, function(err, spam_count) {
             if (err instanceof NoSuchThingError) {
                 spam_count = 0;
             }
-            var g = 2 * not_spam_count;
+            var g = 2 * ham_count;
             var b = spam_count;
             if (g + b > 5) {
                 var p = Math.max(MINPROB,
                                  Math.min(MAXPROB,
                                           Math.min(1, b/spam_total)/
-                                          (Math.min(1, g/not_spam_total) + Math.min(1, b/spam_total))));
+                                          (Math.min(1, g/ham_total) + Math.min(1, b/spam_total))));
                 db.save('prob', token, p, function(err, value) {});
             }
         });
@@ -146,28 +146,28 @@ function updateNotSpamCount(token, spam_total, not_spam_total) {
 
 function updateSpamCounts(tokens, onSuccess) {
     db.incr('spamtotal', 1, function(err, spam_total) {
-        db.read('hamtotal', 1, function(err, not_spam_total) {
+        db.read('hamtotal', 1, function(err, ham_total) {
             if (err instanceof NoSuchThingError) {
-                not_spam_total = 0;
+                ham_total = 0;
             }
             var i;
             for (i in tokens) { // Not sure I love this
-                updateSpamCount(tokens[i], spam_total, not_spam_total);
+                updateSpamCount(tokens[i], spam_total, ham_total);
             }
             onSuccess();
         });
     });
 }
 
-function updateNotSpamCounts(tokens, onSuccess) {
-    db.incr('hamtotal', 1, function(err, not_spam_total) {
+function updateHamCounts(tokens, onSuccess) {
+    db.incr('hamtotal', 1, function(err, ham_total) {
         db.read('spamtotal', 1, function(err, spam_total) {
             if (err instanceof NoSuchThingError) {
                 spam_total = 0;
             }
             var i;
             for (i in tokens) { // Not sure I love this
-                updateNotSpamCount(tokens[i], spam_total, not_spam_total);
+                updateHamCount(tokens[i], spam_total, ham_total);
             }
             onSuccess();
         });
@@ -229,9 +229,9 @@ function thisIsSpam(req, res, next) {
     });
 }
 
-function thisIsNotSpam(req, res, next) {
+function thisIsHam(req, res, next) {
     var tokens = tokenize(req.body);
-    updateNotSpamCounts(tokens, function() {
+    updateHamCounts(tokens, function() {
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify("Good to know"));
     });
@@ -260,10 +260,10 @@ server = connect.createServer(
     connect.logger(),
     connect.bodyParser(),
     connect.errorHandler({showMessage: true}),
-    connect.router(function(app){
+    connect.router(function(app) {
         app.post('/is-this-spam', isThisSpam);
         app.post('/this-is-spam', thisIsSpam);
-        app.post('/this-is-ham', thisIsNotSpam);
+        app.post('/this-is-ham', thisIsHam);
         app.post('/tokenize', testTokenize);
     })
 );
