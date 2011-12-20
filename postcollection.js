@@ -20,7 +20,7 @@ url = require('url');
 fs = require('fs');
 http = require('http');
 
-function postActivity(serverUrl, activity) {
+function postActivity(serverUrl, auth, activity) {
 
     var results = '';
     var toSend = JSON.stringify(activity);
@@ -28,6 +28,7 @@ function postActivity(serverUrl, activity) {
     var parts = url.parse(serverUrl);
 
     var options = {
+        'auth': auth,
 	host: parts.hostname,
 	port: parts.port,
 	method: 'POST',
@@ -43,7 +44,7 @@ function postActivity(serverUrl, activity) {
 	res.on('end', function () {
 	    console.log("Results for activity " + activity.id + ": " + results);
 	});
-    })
+    });
 
     req.on('error', function(e) {
 	console.log("Problem with activity " + activity.id + ": " + e.message);
@@ -54,13 +55,14 @@ function postActivity(serverUrl, activity) {
     console.log("posted " + activity.id + " (" + toSend.length + " chars)");
 }
 
-if (process.argv.length != 4) {
-    process.stderr.write("USAGE: node postcollection.js filename.json URL\n");
+if (process.argv.length != 5) {
+    process.stderr.write("USAGE: node postcollection.js username:password filename.json URL\n");
     process.exit(1);
 }
 
-var fileName = process.argv[2];
-var serverUrl = process.argv[3];
+var auth = process.argv[2];
+var fileName = process.argv[3];
+var serverUrl = process.argv[4];
 
 fs.readFile(fileName, function (err, data) {
 
@@ -72,7 +74,7 @@ fs.readFile(fileName, function (err, data) {
     var collection = JSON.parse(data);
 
     for (i in collection.items) {
-	postActivity(serverUrl, collection.items[i]);
+	postActivity(serverUrl, auth, collection.items[i]);
     }
 });
 

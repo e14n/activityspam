@@ -260,6 +260,7 @@ server = connect.createServer(
     connect.logger(),
     connect.bodyParser(),
     connect.errorHandler({showMessage: true}),
+    connect.basicAuth(config.username, config.password),
     connect.router(function(app) {
         app.post('/is-this-spam', isThisSpam);
         app.post('/this-is-spam', thisIsSpam);
