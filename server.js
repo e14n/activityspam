@@ -41,21 +41,43 @@ function tokenArray(str) {
     return str.split(BOUNDARY).filter(function (s) { return (s.length > 0); });
 }
 
+function makeDigrams(parts) {
+    var i, dg = [];
+
+    for (i = 0; i < parts.length; i++) {
+        if (i == 0) {
+            dg.push("^" + parts[i]);
+        }
+        if (i == parts.length - 1) {
+            dg.push(parts[i] + "^");
+        } else {
+            dg.push(parts[i] + "^" + parts[i+1]);
+        }
+    }
+
+    return dg;
+}
+
 function tokenize(obj) {
     var tokens = [],
         prefixer = function(full) {
             return function(part) { return full + '=' + part; };
         },
-        prop, full, parts, prefixed;
+        prop, full, parts, fixer, prefixed, digrams, prefixedDigrams;
 
     for (prop in obj) {
         full = (arguments.length == 2) ? arguments[1]+'.'+prop : prop;
         switch (typeof(obj[prop])) {
         case "string":
+            fixer = prefixer(full);
             parts = tokenArray(obj[prop]);
             tokens = tokens.concat(parts);
-            prefixed = parts.map(prefixer(full));
+            digrams = makeDigrams(parts);
+            tokens = tokens.concat(digrams);
+            prefixed = parts.map(fixer);
             tokens = tokens.concat(prefixed);
+            prefixedDigrams = digrams.map(fixer);
+            tokens = tokens.concat(prefixedDigrams);
             break;
         case "number":
         case "boolean":
@@ -86,7 +108,7 @@ function uniq(arr) {
 
 function updateSpamCount(token, spam_total, not_spam_total) {
     db.incr('spam', token, function(err, spam_count) {
-        db.read('not-spam', token, function(err, not_spam_count) {
+        db.read('ham', token, function(err, not_spam_count) {
             if (err instanceof NoSuchThingError) {
                 not_spam_count = 0;
             }
@@ -104,7 +126,7 @@ function updateSpamCount(token, spam_total, not_spam_total) {
 }
 
 function updateNotSpamCount(token, spam_total, not_spam_total) {
-    db.incr('not-spam', token, function(err, not_spam_count) {
+    db.incr('ham', token, function(err, not_spam_count) {
         db.read('spam', token, function(err, spam_count) {
             if (err instanceof NoSuchThingError) {
                 spam_count = 0;
@@ -124,7 +146,7 @@ function updateNotSpamCount(token, spam_total, not_spam_total) {
 
 function updateSpamCounts(tokens, onSuccess) {
     db.incr('spamtotal', 1, function(err, spam_total) {
-        db.read('notspamtotal', 1, function(err, not_spam_total) {
+        db.read('hamtotal', 1, function(err, not_spam_total) {
             if (err instanceof NoSuchThingError) {
                 not_spam_total = 0;
             }
@@ -138,7 +160,7 @@ function updateSpamCounts(tokens, onSuccess) {
 }
 
 function updateNotSpamCounts(tokens, onSuccess) {
-    db.incr('notspamtotal', 1, function(err, not_spam_total) {
+    db.incr('hamtotal', 1, function(err, not_spam_total) {
         db.read('spamtotal', 1, function(err, spam_total) {
             if (err instanceof NoSuchThingError) {
                 spam_total = 0;
@@ -241,7 +263,7 @@ server = connect.createServer(
     connect.router(function(app){
         app.post('/is-this-spam', isThisSpam);
         app.post('/this-is-spam', thisIsSpam);
-        app.post('/this-is-not-spam', thisIsNotSpam);
+        app.post('/this-is-ham', thisIsNotSpam);
         app.post('/tokenize', testTokenize);
     })
 );
@@ -249,10 +271,10 @@ server = connect.createServer(
 params = config.params;
 
 params.schema = {'spam': {pkey: 'token'},
-                 'not-spam': {pkey: 'token'},
+                 'ham': {pkey: 'token'},
                  'prob': {pkey: 'token'},
                  'spamtotal': {pkey: 'service'},
-                 'notspamtotal': {pkey: 'service'}};
+                 'hamtotal': {pkey: 'service'}};
 
 db = Databank.get(config.driver, params);
 
