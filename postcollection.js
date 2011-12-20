@@ -16,14 +16,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-url = require('url');
-fs = require('fs');
-http = require('http');
+var url = require('url'),
+    fs = require('fs'),
+    http = require('http');
 
 function postActivity(serverUrl, auth, activity) {
 
     var results = '';
     var toSend = JSON.stringify(activity);
+    var req;
 
     var parts = url.parse(serverUrl);
 
