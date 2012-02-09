@@ -246,7 +246,7 @@ function thisIsSpam(req, res, next) {
     var tokens = tokenize(req.body);
     updateSpamCounts(tokens, function() {
         res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(JSON.stringify("Thanks"));
+        res.end(JSON.stringify({tokens: tokens.length}));
     });
 }
 
@@ -254,7 +254,7 @@ function thisIsHam(req, res, next) {
     var tokens = tokenize(req.body);
     updateHamCounts(tokens, function() {
         res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(JSON.stringify("Good to know"));
+        res.end(JSON.stringify({tokens: tokens.length}));
     });
 }
 
