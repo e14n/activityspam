@@ -1,0 +1,4 @@
+exports.driver = "redis";
+exports.params = {};
+exports.username = "somename";
+exports.password = "somepassword";
