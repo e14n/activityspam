@@ -60,9 +60,9 @@ function makeDigrams(parts) {
 
 function isArray(obj) {
     if (obj.constructor.toString().indexOf("Array") == -1) {
-	return false;
+        return false;
     } else {
-	return true;
+        return true;
     }
 }
 
@@ -74,43 +74,43 @@ function tokenize(obj) {
         prop, full, parts, fixer, prefixed, digrams, prefixedDigrams, fp, i;
 
     if (isArray(obj)) {
-	full = (arguments.length == 2) ? arguments[1]+'.length' : 'length';
-	tokens.push(full+'='+obj.length);
+        full = (arguments.length == 2) ? arguments[1]+'.length' : 'length';
+        tokens.push(full+'='+obj.length);
     }
 
     for (prop in obj) {
-	fp = [];
-	if (isArray(obj)) {
+        fp = [];
+        if (isArray(obj)) {
             fp.push((arguments.length == 2) ? arguments[1]+'.N' : 'N');
-	} else {
+        } else {
             fp.push((arguments.length == 2) ? arguments[1]+'.'+prop : prop);
-	}
-	for (i in fp) {
-	    full = fp[i];
+        }
+        for (i in fp) {
+            full = fp[i];
             switch (typeof(obj[prop])) {
             case "string":
-		fixer = prefixer(full);
-		parts = tokenArray(obj[prop]);
-		tokens = tokens.concat(parts);
-		digrams = makeDigrams(parts);
-		tokens = tokens.concat(digrams);
-		prefixed = parts.map(fixer);
-		tokens = tokens.concat(prefixed);
-		prefixedDigrams = digrams.map(fixer);
-		tokens = tokens.concat(prefixedDigrams);
-		break;
+                fixer = prefixer(full);
+                parts = tokenArray(obj[prop]);
+                tokens = tokens.concat(parts);
+                digrams = makeDigrams(parts);
+                tokens = tokens.concat(digrams);
+                prefixed = parts.map(fixer);
+                tokens = tokens.concat(prefixed);
+                prefixedDigrams = digrams.map(fixer);
+                tokens = tokens.concat(prefixedDigrams);
+                break;
             case "number":
             case "boolean":
-		tokens.push(full+'='+tokenString(obj[prop].toString()));
-		break;
+                tokens.push(full+'='+tokenString(obj[prop].toString()));
+                break;
             case "object":
-		tokens = tokens.concat(tokenize(obj[prop], full));
-		break;
+                tokens = tokens.concat(tokenize(obj[prop], full));
+                break;
             default:
-		// XXX: loggit
-		break;
-	    }
-	}
+                // XXX: loggit
+                break;
+            }
+        }
     }
     return tokens;
 }
