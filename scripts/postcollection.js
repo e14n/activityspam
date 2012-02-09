@@ -16,45 +16,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var url = require('url'),
-    fs = require('fs'),
-    http = require('http');
-
-function postActivity(serverUrl, auth, activity) {
-
-    var results = '';
-    var toSend = JSON.stringify(activity);
-    var req;
-
-    var parts = url.parse(serverUrl);
-
-    var options = {
-        'auth': auth,
-	host: parts.hostname,
-	port: parts.port,
-	method: 'POST',
-	path: (parts.search) ? parts.pathname+'?'+parts.search : parts.pathname,
-	headers: {'content-type': 'application/json',
-		  'user-agent': 'postcollection.js/0.1.0dev'}
-    };
-
-    req = http.request(options, function(res) {
-	res.on('data', function (chunk) {
-	    results = results + chunk;
-	});
-	res.on('end', function () {
-	    console.log("Results for activity " + activity.id + ": " + results);
-	});
-    });
-
-    req.on('error', function(e) {
-	console.log("Problem with activity " + activity.id + ": " + e.message);
-    });
-
-    req.write(toSend);
-    req.end();
-    console.log("posted " + activity.id + " (" + toSend.length + " chars)");
-}
+var fs = require('fs'),
+    common = require('./common'),
+    postActivity = common.postActivity;
 
 if (process.argv.length != 5) {
     process.stderr.write("USAGE: node postcollection.js username:password filename.json URL\n");
@@ -66,13 +30,14 @@ var fileName = process.argv[3];
 var serverUrl = process.argv[4];
 
 fs.readFile(fileName, function (err, data) {
+    var i, collection;
 
     if (err) {
 	console.log("Error reading file: " + err);
 	process.exit(1);
     }
 
-    var collection = JSON.parse(data);
+    collection = JSON.parse(data);
 
     for (i in collection.items) {
 	postActivity(serverUrl, auth, collection.items[i]);
