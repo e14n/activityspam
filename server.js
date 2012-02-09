@@ -58,38 +58,59 @@ function makeDigrams(parts) {
     return dg;
 }
 
+function isArray(obj) {
+    if (obj.constructor.toString().indexOf("Array") == -1) {
+	return false;
+    } else {
+	return true;
+    }
+}
+
 function tokenize(obj) {
     var tokens = [],
         prefixer = function(full) {
             return function(part) { return full + '=' + part; };
         },
-        prop, full, parts, fixer, prefixed, digrams, prefixedDigrams;
+        prop, full, parts, fixer, prefixed, digrams, prefixedDigrams, fp, i;
+
+    if (isArray(obj)) {
+	full = (arguments.length == 2) ? arguments[1]+'.length' : 'length';
+	tokens.push(full+'='+obj.length);
+    }
 
     for (prop in obj) {
-        full = (arguments.length == 2) ? arguments[1]+'.'+prop : prop;
-        switch (typeof(obj[prop])) {
-        case "string":
-            fixer = prefixer(full);
-            parts = tokenArray(obj[prop]);
-            tokens = tokens.concat(parts);
-            digrams = makeDigrams(parts);
-            tokens = tokens.concat(digrams);
-            prefixed = parts.map(fixer);
-            tokens = tokens.concat(prefixed);
-            prefixedDigrams = digrams.map(fixer);
-            tokens = tokens.concat(prefixedDigrams);
-            break;
-        case "number":
-        case "boolean":
-            tokens.push(full+'='+tokenString(obj[prop].toString()));
-            break;
-        case "object":
-            tokens = tokens.concat(tokenize(obj[prop], full));
-            break;
-        default:
-            // XXX: loggit
-            break;
-        }
+	fp = [];
+	if (isArray(obj)) {
+            fp.push((arguments.length == 2) ? arguments[1]+'.N' : 'N');
+	} else {
+            fp.push((arguments.length == 2) ? arguments[1]+'.'+prop : prop);
+	}
+	for (i in fp) {
+	    full = fp[i];
+            switch (typeof(obj[prop])) {
+            case "string":
+		fixer = prefixer(full);
+		parts = tokenArray(obj[prop]);
+		tokens = tokens.concat(parts);
+		digrams = makeDigrams(parts);
+		tokens = tokens.concat(digrams);
+		prefixed = parts.map(fixer);
+		tokens = tokens.concat(prefixed);
+		prefixedDigrams = digrams.map(fixer);
+		tokens = tokens.concat(prefixedDigrams);
+		break;
+            case "number":
+            case "boolean":
+		tokens.push(full+'='+tokenString(obj[prop].toString()));
+		break;
+            case "object":
+		tokens = tokens.concat(tokenize(obj[prop], full));
+		break;
+            default:
+		// XXX: loggit
+		break;
+	    }
+	}
     }
     return tokens;
 }
