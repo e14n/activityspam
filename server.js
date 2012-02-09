@@ -45,7 +45,7 @@ function makeDigrams(parts) {
     var i, dg = [];
 
     for (i = 0; i < parts.length; i++) {
-        if (i == 0) {
+        if (i === 0) {
             dg.push("^" + parts[i]);
         }
         if (i == parts.length - 1) {
