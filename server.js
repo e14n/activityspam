@@ -27,7 +27,7 @@ var connect = require('connect'),
 
 function thisIsSpam(req, res, next) {
     var tokens = Tokenizer.tokenize(req.body);
-    SpamFilter.updateSpamCounts(tokens, function() {
+    SpamFilter.updateCounts('spam', tokens, function() {
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({tokens: tokens.length}));
     });
@@ -35,7 +35,7 @@ function thisIsSpam(req, res, next) {
 
 function thisIsHam(req, res, next) {
     var tokens = Tokenizer.tokenize(req.body);
-    SpamFilter.updateHamCounts(tokens, function() {
+    SpamFilter.updateCounts('ham', tokens, function() {
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({tokens: tokens.length}));
     });
