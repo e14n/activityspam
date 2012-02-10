@@ -1,7 +1,9 @@
 {
     "name": "activity-spam",
     "version": "0.1.0dev",
-    "dependencies": { "connect": "1.x", "databank": "0.x" }
+    "dependencies": { "connect": "1.x",
+                      "databank": "0.x",
+                      "step", "*" }
 }
 
 	
