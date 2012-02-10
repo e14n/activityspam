@@ -19,8 +19,8 @@ var connect = require('connect'),
     Databank = databank.Databank,
     NoSuchThingError = databank.NoSuchThingError,
     config = require('./config'),
-    Tokenizer = require('./lib/tokenizer'),
-    SpamFilter = require('./lib/spamfilter'),
+    Tokenizer = require('./lib/tokenizer').Tokenizer,
+    SpamFilter = require('./lib/spamfilter').SpamFilter,
     params, server, db;
 
 // Training and measuring values
