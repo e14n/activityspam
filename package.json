@@ -3,7 +3,7 @@
     "version": "0.1.0dev",
     "dependencies": { "connect": "1.x",
                       "databank": "0.x",
-                      "step", "*" }
+                      "step": "*" }
 }
 
 	
