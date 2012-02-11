@@ -64,13 +64,10 @@ function uniq(arr) {
 }
 
 function isThisSpam(req, res, next) {
+
     var tokens = uniq(Tokenizer.tokenize(req.body));
-    SpamFilter.getProbabilities(tokens, function(probs) {
-        var bestprobs = SpamFilter.bestProbabilities(probs);
-        var prob = SpamFilter.combineProbabilities(bestprobs);
-        var decision = { probability: prob,
-                         isSpam: ((prob > SpamFilter.SPAM_PROB) ? true : false),
-                         bestKeys: bestprobs };
+
+    SpamFilter.test(tokens, function(err, decision) {
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify(decision));
     });
