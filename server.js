@@ -26,28 +26,26 @@ var connect = require('connect'),
 // Training and measuring values
 
 function thisIsSpam(req, res, next) {
-    var tokens = Tokenizer.tokenize(req.body);
-    SpamFilter.updateCounts('spam', tokens, function(err, probs) {
+    SpamFilter.train('spam', req.body, function(err, trainrec) {
         if (err) {
             res.writeHead(500, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({error: err.getMessage()}));
         } else {
             res.writeHead(200, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify({tokens: tokens.length}));
+            res.end(JSON.stringify(trainrec));
         }
     });
 }
 
 function thisIsHam(req, res, next) {
-    var tokens = Tokenizer.tokenize(req.body);
-    SpamFilter.updateCounts('ham', tokens, function(err, probs) {
+    SpamFilter.train('ham', req.body, function(err, trainrec) {
         if (err) {
             res.writeHead(500, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({error: err.getMessage()}));
         } else {
             res.writeHead(200, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify({tokens: tokens.length}));
-        } 
+            res.end(JSON.stringify(trainrec));
+        }
     });
 }
 
