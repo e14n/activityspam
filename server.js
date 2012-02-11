@@ -68,8 +68,13 @@ function isThisSpam(req, res, next) {
     var tokens = uniq(Tokenizer.tokenize(req.body));
 
     SpamFilter.test(tokens, function(err, decision) {
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(JSON.stringify(decision));
+        if (err) {
+            res.writeHead(500, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify(err.getMessage()));
+        } else {
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify(decision));
+        }
     });
 }
 
