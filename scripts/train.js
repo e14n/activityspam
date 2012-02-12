@@ -22,7 +22,7 @@ var fs = require('fs'),
     path = require('path'),
     postActivity = common.postActivity;
 
-var MAX_COUNT = 10000;
+var MAX_COUNT = 1000;
 
 if (process.argv.length != 6) {
     process.stderr.write("USAGE: node train.js username:password hamdir spamdir hostname:port\n");
@@ -82,4 +82,6 @@ while (cnt < MAX_COUNT) {
 
     trainFile('ham', ham);
     trainFile('spam', spam);
+
+    cnt++;
 }
