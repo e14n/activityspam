@@ -4,6 +4,7 @@
     "dependencies": { "connect": "1.x",
                       "databank": "0.x",
 		      "dateformat": "1.x",
+                      "underscore": "*",
                       "step": "*" }
 }
 
