@@ -95,6 +95,9 @@ server = connect.createServer(
     })
 );
 
+Tokenizer.digrams = config.digrams || true;
+Tokenizer.prefixed = config.prefixed || true;
+
 params = config.params;
 
 params.schema = SpamFilter.schema;
