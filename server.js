@@ -95,8 +95,8 @@ server = connect.createServer(
     })
 );
 
-Tokenizer.digrams = config.digrams || true;
-Tokenizer.prefixed = config.prefixed || true;
+Tokenizer.useDigrams = config.useDigrams || true;
+Tokenizer.usePrefixes = config.usePrefixes || true;
 
 params = config.params;
 
