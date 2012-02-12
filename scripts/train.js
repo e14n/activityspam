@@ -19,11 +19,12 @@
 var fs = require('fs'),
     common = require('./common'),
     _ = require('underscore'),
+    path = require('path'),
     postActivity = common.postActivity;
 
 var MAX_COUNT = 10000;
 
-if (process.argv.length != 5) {
+if (process.argv.length != 6) {
     process.stderr.write("USAGE: node train.js username:password hamdir spamdir hostname:port\n");
     process.exit(1);
 }
@@ -36,10 +37,12 @@ var ActivityGenerator = function(dir) {
 };
 
 ActivityGenerator.prototype.next = function() {
+    var fname;
     if (this.files.length === 0) {
         return null;
     } else {
-        return this.files.pop();
+        fname = this.files.pop();
+        return path.join(this.dir, fname);
     }
 };
 
@@ -60,8 +63,8 @@ var trainFile = function(cat, fileName) {
 };
 
 var auth = process.argv[2];
-var hamdir = process.argv[3];
-var spamdir = process.argv[4];
+var hamdir = path.normalize(process.argv[3]);
+var spamdir = path.normalize(process.argv[4]);
 var hp = process.argv[5];
 
 var spammer = new ActivityGenerator(spamdir);
@@ -73,8 +76,10 @@ while (cnt < MAX_COUNT) {
     spam = spammer.next();
     ham  = hammer.next();
     
-    if (ham && spam) {
-        trainFile('ham', ham);
-        trainFile('spam', spam);
-    }
+    if (!ham || !spam) {
+        break;
+    } 
+
+    trainFile('ham', ham);
+    trainFile('spam', spam);
 }
