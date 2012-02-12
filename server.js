@@ -103,6 +103,10 @@ if (config.hasOwnProperty("usePrefixes")) {
     Tokenizer.usePrefixes = config.usePrefixes;
 }
 
+if (config.hasOwnProperty("useBare")) {
+    Tokenizer.usePrefixes = config.useBare;
+}
+
 params = config.params;
 
 params.schema = SpamFilter.schema;
