@@ -19,9 +19,8 @@
 var url = require('url'),
     http = require('http');
 
-var postActivity = function(serverUrl, auth, activity) {
+var postActivity = function(serverUrl, auth, activity, callback) {
 
-    var results = '';
     var toSend = JSON.stringify(activity);
     var req;
 
@@ -37,22 +36,40 @@ var postActivity = function(serverUrl, auth, activity) {
 		  'user-agent': 'postcollection.js/0.1.0dev'}
     };
 
+    if (!callback) {
+        callback = postReport(activity);
+    }
+    
     req = http.request(options, function(res) {
+        var body = '';
+
 	res.on('data', function (chunk) {
-	    results = results + chunk;
+	    body = body + chunk;
 	});
+
 	res.on('end', function () {
-	    console.log("Results for activity " + activity.id + ": " + results);
+            callback(null, res, body);
 	});
     });
 
-    req.on('error', function(e) {
-	console.log("Problem with activity " + activity.id + ": " + e.message);
+    req.on('error', function(err) {
+        callback(err, null);
     });
 
     req.write(toSend);
     req.end();
-    console.log("posted " + activity.id + " (" + toSend.length + " chars)");
+};
+
+var postReport = function(activity) {
+    return function(err, res, body) {
+        if (err) {
+            console.log("Error posting activity " + activity.id);
+            console.error(err);
+        } else {
+            console.log("Results of posting " + activity.id + ": " + body);
+        }
+    };
 };
 
 exports.postActivity = postActivity;
+exports.postReport = postReport;
