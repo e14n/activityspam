@@ -22,7 +22,8 @@ var fs = require('fs'),
     path = require('path'),
     postActivity = common.postActivity;
 
-var MAX_COUNT = 1000;
+var MAX_COUNT = 4096;
+var MAX_RUNNING = 128;
 
 if (process.argv.length != 6) {
     process.stderr.write("USAGE: node train.js username:password hamdir spamdir hostname:port\n");
@@ -46,6 +47,10 @@ ActivityGenerator.prototype.next = function() {
     }
 };
 
+var running = 0;
+var total = 0;
+var last = null;
+
 var trainFile = function(cat, fileName) {
     var serverUrl = "http://" + hp + "/this-is-" + cat;
     fs.readFile(fileName, function (err, data) {
@@ -58,7 +63,18 @@ var trainFile = function(cat, fileName) {
 
         activity = JSON.parse(data);
 
-        postActivity(serverUrl, auth, activity);
+        postActivity(serverUrl, auth, activity, function(err, res, body) {
+            running--;
+            total++;
+            if (err) {
+                console.error(err);
+            } else {
+                console.log(path.basename(fileName));
+                if (total < MAX_COUNT && running < MAX_RUNNING) {
+                    alternate();
+                }
+            }
+        });
     });
 };
 
@@ -70,18 +86,34 @@ var hp = process.argv[5];
 var spammer = new ActivityGenerator(spamdir);
 var hammer = new ActivityGenerator(hamdir);
 var ham, spam;
-var cnt = 0;
 
-while (cnt < MAX_COUNT) {
-    spam = spammer.next();
-    ham  = hammer.next();
-    
-    if (!ham || !spam) {
+var alternate = function() {
+    if (last === 'ham') {
+        spam = spammer.next();
+        
+        if (!spam) {
+            return false;
+        } 
+
+        trainFile('spam', spam);
+        last = 'spam';
+    } else {
+        ham  = hammer.next();
+        if (!ham) {
+            return true;
+        }
+        trainFile('ham', ham);
+        last = 'ham';
+    }
+
+    running++;
+};
+
+var f = true;
+
+while (running < MAX_RUNNING) {
+    f = alternate();
+    if (!f) {
         break;
-    } 
-
-    trainFile('ham', ham);
-    trainFile('spam', spam);
-
-    cnt++;
+    }
 }
