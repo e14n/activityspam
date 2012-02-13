@@ -95,16 +95,15 @@ server = connect.createServer(
     })
 );
 
-if (config.hasOwnProperty("useDigrams")) {
-    Tokenizer.useDigrams = config.useDigrams;
-}
+// Set the tokenizer options
 
-if (config.hasOwnProperty("usePrefixes")) {
-    Tokenizer.usePrefixes = config.usePrefixes;
-}
+var i, opt, opts = ["useDigrams", "usePrefixes", "useBare", "useArrayLength"];
 
-if (config.hasOwnProperty("useBare")) {
-    Tokenizer.usePrefixes = config.useBare;
+for (i in opts) {
+    opt = opts[i];
+    if (config.hasOwnProperty(opt)) {
+        Tokenizer[opt] = config[opt];
+    }
 }
 
 params = config.params;
