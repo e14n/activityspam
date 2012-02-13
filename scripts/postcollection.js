@@ -18,7 +18,8 @@
 
 var fs = require('fs'),
     common = require('./common'),
-    postActivity = common.postActivity;
+    postActivity = common.postActivity,
+    postReport = common.postReport;
 
 if (process.argv.length != 5) {
     process.stderr.write("USAGE: node postcollection.js username:password filename.json URL\n");
@@ -30,7 +31,7 @@ var fileName = process.argv[3];
 var serverUrl = process.argv[4];
 
 fs.readFile(fileName, function (err, data) {
-    var i, collection;
+    var i, collection, activity;
 
     if (err) {
 	console.log("Error reading file: " + err);
@@ -40,7 +41,7 @@ fs.readFile(fileName, function (err, data) {
     collection = JSON.parse(data);
 
     for (i in collection.items) {
-	postActivity(serverUrl, auth, collection.items[i]);
+        activity = collection.items[i];
+	postActivity(serverUrl, auth, activity, postReport(activity));
     }
 });
-

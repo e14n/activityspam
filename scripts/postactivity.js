@@ -18,7 +18,8 @@
 
 var fs = require('fs'),
     common = require('./common'),
-    postActivity = common.postActivity;
+    postActivity = common.postActivity,
+    postReport = common.postReport;
 
 if (process.argv.length != 5) {
     process.stderr.write("USAGE: node postactivity.js username:password filename.json URL\n");
@@ -39,6 +40,6 @@ fs.readFile(fileName, function (err, data) {
 
     activity = JSON.parse(data);
 
-    postActivity(serverUrl, auth, activity);
+    postActivity(serverUrl, auth, activity, postReport(activity));
 });
 
