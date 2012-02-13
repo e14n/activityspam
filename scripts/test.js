@@ -95,9 +95,6 @@ var testFile = function(cat, fileName) {
                     }
                 }
 
-                console.log(fileName + " (" + cat + ") results: " + testResults.isSpam + " " +
-                            (((cat === 'ham' && !testResults.isSpam) || (cat === 'spam' && testResults.isSpam)) ? "HIT" : "MISS"));
-
                 if (total < MAX_COUNT && running < MAX_RUNNING) {
                     alternate();
                 }
