@@ -22,11 +22,10 @@ var fs = require('fs'),
     path = require('path'),
     postActivity = common.postActivity;
 
-var MAX_COUNT = 4096;
-var MAX_RUNNING = 128;
+var MAX_RUNNING = 896;
 
-if (process.argv.length != 6) {
-    process.stderr.write("USAGE: node train.js username:password hamdir spamdir hostname:port\n");
+if (process.argv.length != 7) {
+    process.stderr.write("USAGE: node train.js username:password hamdir spamdir hostname:port maxcount\n");
     process.exit(1);
 }
 
@@ -70,7 +69,7 @@ var trainFile = function(cat, fileName) {
                 console.error(err);
             } else {
                 console.log(path.basename(fileName));
-                if (total < MAX_COUNT && running < MAX_RUNNING) {
+                if (total < maxcount && running < MAX_RUNNING) {
                     alternate();
                 }
             }
@@ -82,6 +81,7 @@ var auth = process.argv[2];
 var hamdir = path.normalize(process.argv[3]);
 var spamdir = path.normalize(process.argv[4]);
 var hp = process.argv[5];
+var maxcount = parseInt(process.argv[6], 10);
 
 var spammer = new ActivityGenerator(spamdir);
 var hammer = new ActivityGenerator(hamdir);
@@ -100,18 +100,19 @@ var alternate = function() {
     } else {
         ham  = hammer.next();
         if (!ham) {
-            return true;
+            return false;
         }
         trainFile('ham', ham);
         last = 'ham';
     }
 
     running++;
+    return true;
 };
 
 var f = true;
 
-while (running < MAX_RUNNING) {
+while (running < Math.min(maxcount, MAX_RUNNING)) {
     f = alternate();
     if (!f) {
         break;
