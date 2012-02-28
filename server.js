@@ -117,6 +117,6 @@ db.connect({}, function(err) {
         console.error(err);
     } else {
         SpamFilter.db = db;
-        server.listen(process.env.PORT || 8001);
+        server.listen(config.port || process.env.PORT || 8001);
     }
 });
