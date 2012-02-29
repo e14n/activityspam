@@ -29,7 +29,7 @@ function thisIsSpam(req, res, next) {
     SpamFilter.train('spam', req.body, function(err, trainrec) {
         if (err) {
             res.writeHead(500, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify({error: err.getMessage()}));
+            res.end(JSON.stringify({error: err.message}));
         } else {
             res.writeHead(200, {'Content-Type': 'application/json'});
             res.end(JSON.stringify(trainrec));
@@ -41,7 +41,7 @@ function thisIsHam(req, res, next) {
     SpamFilter.train('ham', req.body, function(err, trainrec) {
         if (err) {
             res.writeHead(500, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify({error: err.getMessage()}));
+            res.end(JSON.stringify({error: err.message}));
         } else {
             res.writeHead(200, {'Content-Type': 'application/json'});
             res.end(JSON.stringify(trainrec));
@@ -68,7 +68,7 @@ function isThisSpam(req, res, next) {
     SpamFilter.test(tokens, function(err, decision) {
         if (err) {
             res.writeHead(500, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify(err.getMessage()));
+            res.end(JSON.stringify(err.message));
         } else {
             res.writeHead(200, {'Content-Type': 'application/json'});
             res.end(JSON.stringify(decision));
@@ -117,6 +117,6 @@ db.connect({}, function(err) {
         console.error(err);
     } else {
         SpamFilter.db = db;
-        server.listen(process.env.PORT || 8001);
+        server.listen(config.port || process.env.PORT || 8001);
     }
 });
