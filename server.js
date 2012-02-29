@@ -14,7 +14,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var connect = require('connect'),
+var process = require('process'),
+    connect = require('connect'),
     databank = require('databank'),
     Databank = databank.Databank,
     NoSuchThingError = databank.NoSuchThingError,
@@ -117,6 +118,9 @@ db.connect({}, function(err) {
         console.error(err);
     } else {
         SpamFilter.db = db;
-        server.listen(config.port || process.env.PORT || 8001);
+        server.listen(config.port || process.env.PORT || 8001, null, function() {
+            // Drop privs if needed
+            process.setuid(config.serverUser);
+        });
     }
 });
