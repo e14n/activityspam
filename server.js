@@ -14,8 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var process = require('process'),
-    connect = require('connect'),
+var connect = require('connect'),
     databank = require('databank'),
     Databank = databank.Databank,
     NoSuchThingError = databank.NoSuchThingError,
