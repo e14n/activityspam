@@ -116,10 +116,14 @@ db.connect({}, function(err) {
     if (err) {
         console.error(err);
     } else {
+
         SpamFilter.db = db;
-        server.listen(config.port || process.env.PORT || 8001, null, function() {
+
+	server.on('listening', function() {
             // Drop privs if needed
             process.setuid(config.serverUser);
         });
+
+        server.listen(config.port || process.env.PORT || 8001);
     }
 });
