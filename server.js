@@ -23,6 +23,7 @@ var connect = require('connect'),
     Tokenizer = require('./lib/tokenizer').Tokenizer,
     SpamFilter = require('./lib/spamfilter').SpamFilter,
     Provider = require('./lib/provider').Provider,
+    _ = require('underscore'),
     params, server, db;
 
 // Training and measuring values
