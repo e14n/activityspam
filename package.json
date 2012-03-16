@@ -2,6 +2,7 @@
     "name": "activity-spam",
     "version": "0.1.0dev",
     "dependencies": { "connect": "1.x",
+		      "connect-auth": ">= 0.5.1",
                       "databank": "0.x",
 		      "dateformat": "1.x",
                       "underscore": "*",
