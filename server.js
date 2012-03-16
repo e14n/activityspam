@@ -15,37 +15,53 @@
 // limitations under the License.
 
 var connect = require('connect'),
+    auth = require('connect-auth'),
     databank = require('databank'),
     Databank = databank.Databank,
     NoSuchThingError = databank.NoSuchThingError,
     config = require('./config'),
     Tokenizer = require('./lib/tokenizer').Tokenizer,
     SpamFilter = require('./lib/spamfilter').SpamFilter,
+    Provider = require('./lib/provider').Provider,
     params, server, db;
 
 // Training and measuring values
 
 function thisIsSpam(req, res, next) {
-    SpamFilter.train('spam', req.body, function(err, trainrec) {
-        if (err) {
-            res.writeHead(500, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify({error: err.message}));
-        } else {
-            res.writeHead(200, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify(trainrec));
+    req.authenticate(['oauth'], function(error, authenticated) { 
+        if (!authenticated) {
+            res.writeHead(401, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify("Not authorized"));
+            return;
         }
+        SpamFilter.train('spam', req.body, function(err, trainrec) {
+            if (err) {
+                res.writeHead(500, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify({error: err.message}));
+            } else {
+                res.writeHead(200, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(trainrec));
+            }
+        });
     });
 }
 
 function thisIsHam(req, res, next) {
-    SpamFilter.train('ham', req.body, function(err, trainrec) {
-        if (err) {
-            res.writeHead(500, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify({error: err.message}));
-        } else {
-            res.writeHead(200, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify(trainrec));
+    req.authenticate(['oauth'], function(error, authenticated) { 
+        if (!authenticated) {
+            res.writeHead(401, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify("Not authorized"));
+            return;
         }
+        SpamFilter.train('ham', req.body, function(err, trainrec) {
+            if (err) {
+                res.writeHead(500, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify({error: err.message}));
+            } else {
+                res.writeHead(200, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(trainrec));
+            }
+        });
     });
 }
 
@@ -63,30 +79,61 @@ function uniq(arr) {
 
 function isThisSpam(req, res, next) {
 
-    var tokens = uniq(Tokenizer.tokenize(req.body));
+    req.authenticate(['oauth'], function(error, authenticated) { 
 
-    SpamFilter.test(tokens, function(err, decision) {
-        if (err) {
-            res.writeHead(500, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify(err.message));
-        } else {
-            res.writeHead(200, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify(decision));
+        if (!authenticated) {
+            res.writeHead(401, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify("Not authorized"));
+            return;
         }
+
+        var tokens = uniq(Tokenizer.tokenize(req.body));
+
+        SpamFilter.test(tokens, function(err, decision) {
+            if (err) {
+                res.writeHead(500, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(err.message));
+            } else {
+                res.writeHead(200, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(decision));
+            }
+        });
     });
 }
 
 function testTokenize(req, res, next) {
-    var tokens = Tokenizer.tokenize(req.body);
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    res.end(JSON.stringify(tokens));
+    req.authenticate(['oauth'], function(error, authenticated) { 
+        if (!authenticated) {
+            res.writeHead(401, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify("Not authorized"));
+            return;
+        }
+        var tokens = Tokenizer.tokenize(req.body);
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify(tokens));
+    });
 }
+
+params = config.params;
+
+if (!_(params).has('schema')) {
+    params.schema = {};
+}
+
+_.extend(params.schema, SpamFilter.schema);
+_.extend(params.schema, Provider.schema);
+
+db = Databank.get(config.driver, params);
 
 server = connect.createServer(
     connect.logger(),
     connect.bodyParser(),
     connect.errorHandler({showMessage: true}),
-    connect.basicAuth(config.username, config.password),
+    auth([auth.Oauth({oauth_provider: new Provider(db),
+                      authenticate_provider: null,
+                      authorize_provider: null,
+                      authorization_finished_provider: null
+                     })]),
     connect.router(function(app) {
         app.post('/is-this-spam', isThisSpam);
         app.post('/this-is-spam', thisIsSpam);
@@ -106,12 +153,6 @@ for (i in opts) {
     }
 }
 
-params = config.params;
-
-params.schema = SpamFilter.schema;
-
-db = Databank.get(config.driver, params);
-
 db.connect({}, function(err) {
     if (err) {
         console.error(err);
@@ -119,7 +160,7 @@ db.connect({}, function(err) {
 
         SpamFilter.db = db;
 
-	server.on('listening', function() {
+        server.on('listening', function() {
             // Drop privs if needed
             process.setuid(config.serverUser);
         });
