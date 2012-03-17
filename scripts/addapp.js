@@ -49,9 +49,18 @@ db.connect({}, function(err) {
         provider.addApp(title, description, function(err, app) {
             if (err) {
                 console.error(err);
+                process.exit(1);
             } else {
                 console.log("KEY: " + app.consumer_key);
                 console.log("SECRET: " + app.secret);
+                db.disconnect(function(err) {
+                    if (err) {
+                        console.error(err);
+                        process.exit(1);
+                    } else {
+                        process.exit(0);
+                    }
+                });
             }
         });
     }
