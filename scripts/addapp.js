@@ -20,7 +20,7 @@ var databank = require('databank'),
     Databank = databank.Databank,
     NoSuchThingError = databank.NoSuchThingError,
     config = require('../config'),
-    Provider = require('./lib/provider').Provider,
+    Provider = require('../lib/provider').Provider,
     _ = require('underscore'),
     argv = require('optimist')
         .usage("node addapp.js title description")
