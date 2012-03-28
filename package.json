@@ -7,6 +7,7 @@
                       "databank": "0.x",
 		      "dateformat": "1.x",
                       "underscore": "*",
+		      "utml": "*",
                       "step": "*",
                       "optimist": ">= 0.3.1" }
 }
