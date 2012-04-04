@@ -23,7 +23,8 @@ var databank = require('databank'),
     Provider = require('../lib/provider').Provider,
     _ = require('underscore'),
     argv = require('optimist')
-        .usage("node addapp.js title description host")
+        .usage("Usage: $0 -t title -d description -s servername")
+        .demand(['t', 'd', 's'])
         .argv,
     params, db;
 
@@ -39,9 +40,9 @@ db = Databank.get(config.driver, params);
 
 var provider = new Provider(db);
 
-var title = argv._[0],
-    description = argv._[1],
-    host = argv._[2];
+var title = argv.t,
+    description = argv.d,
+    host = argv.s;
 
 db.connect({}, function(err) {
     if (err) {
