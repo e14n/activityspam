@@ -35,7 +35,7 @@ fs.readFile(norm, function (err, data) {
         reporter = function(outfile) {
             return function(err) {
                 if (err) {
-	            console.log("Error reading file: " + err);
+                    console.log("Error reading file: " + err);
                 } else {
                     console.log(outfile);
                 }
@@ -43,8 +43,8 @@ fs.readFile(norm, function (err, data) {
         };
 
     if (err) {
-	console.log("Error reading file: " + err);
-	process.exit(1);
+        console.log("Error reading file: " + err);
+        process.exit(1);
     }
 
     collection = JSON.parse(data);
