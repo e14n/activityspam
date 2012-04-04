@@ -100,14 +100,10 @@ exports.testTokenize = function(req, res, next) {
 	    return;
 	}
 
-	if (!authenticated) {
-            res.writeHead(401, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify("Not authorized"));
-            return;
-        }
-
-        var tokens = Tokenizer.tokenize(req.body);
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(JSON.stringify(tokens));
+	if (authenticated) {
+            var tokens = Tokenizer.tokenize(req.body);
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify(tokens));
+	}
     });
 };
