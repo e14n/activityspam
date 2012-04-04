@@ -17,47 +17,45 @@
 // limitations under the License.
 
 var url = require('url'),
-    http = require('http');
+    http = require('http'),
+    config = require('./config'),
+    OAuth = require('oauth').OAuth,
+    _ = require('underscore');
 
-var postActivity = function(serverUrl, auth, activity, callback) {
+var postActivity = function(serverUrl, activity, callback) {
 
-    var toSend = JSON.stringify(activity);
-    var req;
-
-    var parts = url.parse(serverUrl);
-
-    var options = {
-        'auth': auth,
-	host: parts.hostname,
-	port: parts.port,
-	method: 'POST',
-	path: (parts.search) ? parts.pathname+'?'+parts.search : parts.pathname,
-	headers: {'content-type': 'application/json',
-		  'user-agent': 'postcollection.js/0.1.0dev'}
-    };
+    var req, oa, parts, toSend, pair;
 
     if (!callback) {
         callback = postReport(activity);
     }
     
-    req = http.request(options, function(res) {
-        var body = '';
+    parts = url.parse(serverUrl);
 
-	res.on('data', function (chunk) {
-	    body = body + chunk;
-	});
+    if (!_(config).have('hosts') ||
+        !_(config.hosts).have(parts.hostname)) {
+        callback(new Error("No OAuth key for " + parts.hostname), null);
+        return;
+    }
 
-	res.on('end', function () {
-            callback(null, res, body);
-	});
+    pair = config.hosts[parts.hostname];
+
+    oa = new OAuth(null, // request token N/A for 2-legged OAuth
+                   null, // access token N/A for 2-legged OAuth
+                   pair.key,
+                   pair.secret,
+                   "1.0",
+                   null,
+                   "HMAC-SHA1",
+                   null, // nonce size; use default
+                   {"User-Agent": "activityspam/0.1"});
+    
+    toSend = JSON.stringify(activity);
+
+    oa.post(serverUrl, null, null, toSend, 'application/json', function(err, data, response) {
+        // Our callback has swapped args to OAuth module's
+        callback(err, response, data);
     });
-
-    req.on('error', function(err) {
-        callback(err, null);
-    });
-
-    req.write(toSend);
-    req.end();
 };
 
 var postReport = function(activity) {

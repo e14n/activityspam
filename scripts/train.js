@@ -24,8 +24,8 @@ var fs = require('fs'),
 
 var MAX_RUNNING = 896;
 
-if (process.argv.length != 7) {
-    process.stderr.write("USAGE: node train.js username:password hamdir spamdir hostname:port maxcount\n");
+if (process.argv.length != 6) {
+    process.stderr.write("USAGE: node train.js hamdir spamdir hostname:port maxcount\n");
     process.exit(1);
 }
 
@@ -62,7 +62,7 @@ var trainFile = function(cat, fileName) {
 
         activity = JSON.parse(data);
 
-        postActivity(serverUrl, auth, activity, function(err, res, body) {
+        postActivity(serverUrl,activity, function(err, res, body) {
             running--;
             total++;
             if (err) {
@@ -77,11 +77,10 @@ var trainFile = function(cat, fileName) {
     });
 };
 
-var auth = process.argv[2];
-var hamdir = path.normalize(process.argv[3]);
-var spamdir = path.normalize(process.argv[4]);
-var hp = process.argv[5];
-var maxcount = parseInt(process.argv[6], 10);
+var hamdir = path.normalize(process.argv[2]);
+var spamdir = path.normalize(process.argv[3]);
+var hp = process.argv[4];
+var maxcount = parseInt(process.argv[5], 10);
 
 var spammer = new ActivityGenerator(spamdir);
 var hammer = new ActivityGenerator(hamdir);
