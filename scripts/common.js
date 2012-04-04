@@ -32,8 +32,8 @@ var postActivity = function(serverUrl, activity, callback) {
     
     parts = url.parse(serverUrl);
 
-    if (!_(config).have('hosts') ||
-        !_(config.hosts).have(parts.hostname)) {
+    if (!_(config).has('hosts') ||
+        !_(config.hosts).has(parts.hostname)) {
         callback(new Error("No OAuth key for " + parts.hostname), null);
         return;
     }
