@@ -16,8 +16,14 @@
 
 // Training and measuring values
 
-var Tokenizer = require('../lib/tokenizer').Tokenizer,
+var config = require('../config'),
+    Tokenizer = require('../lib/tokenizer').Tokenizer,
     SpamFilter = require('../lib/spamfilter').SpamFilter;
+
+exports.index = function(req, res, next) {
+    res.render('index', { title: 'Home', 
+			  site: (config.site) ? config.site : "ActivitySpam" });
+};
 
 exports.thisIsSpam = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
