@@ -25,8 +25,8 @@ var fs = require('fs'),
 var MAX_COUNT = 1024;
 var MAX_RUNNING = 128;
 
-if (process.argv.length != 7) {
-    process.stderr.write("USAGE: node test.js username:password hamdir spamdir hostname:port trained.txt\n");
+if (process.argv.length != 6) {
+    process.stderr.write("USAGE: node test.js hamdir spamdir hostname:port trained.txt\n");
     process.exit(1);
 }
 
@@ -73,7 +73,7 @@ var testFile = function(cat, fileName) {
 
         activity = JSON.parse(data);
 
-        postActivity(serverUrl, auth, activity, function(err, res, body) {
+        postActivity(serverUrl, activity, function(err, res, body) {
             var testResults;
             running--;
             total++;
@@ -107,11 +107,10 @@ var testFile = function(cat, fileName) {
     });
 };
 
-var auth = process.argv[2];
-var hamdir = path.normalize(process.argv[3]);
-var spamdir = path.normalize(process.argv[4]);
-var hp = process.argv[5];
-var tf = process.argv[6];
+var hamdir = path.normalize(process.argv[2]);
+var spamdir = path.normalize(process.argv[3]);
+var hp = process.argv[4];
+var tf = process.argv[5];
 
 var trainedData = fs.readFileSync(tf);
 trainedData = trainedData.toString();

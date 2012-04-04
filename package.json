@@ -9,6 +9,7 @@
                       "underscore": "*",
 		      "utml": "*",
                       "step": "*",
+		      "oauth": "*",
                       "optimist": ">= 0.3.1" }
 }
 
