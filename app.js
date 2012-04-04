@@ -39,7 +39,13 @@ _.extend(params.schema, Provider.schema);
 
 db = Databank.get(config.driver, params);
 
-var app = module.exports = express.createServer();
+var app = module.exports = express.createServer(
+    auth([auth.Oauth({oauth_provider: new Provider(db),
+                      authenticate_provider: null,
+                      authorize_provider: null,
+                      authorization_finished_provider: null
+                     })])
+);
 
 // Configuration
 
@@ -50,13 +56,6 @@ app.configure(function() {
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(__dirname + '/public'));
-    app.use(auth([auth.Oauth({oauth_provider: new Provider(db),
-                              authenticate_provider: null,
-                              authorize_provider: null,
-                              authorization_finished_provider: null
-                             })
-                 ])
-           );
 });
 
 app.configure('development', function() {
