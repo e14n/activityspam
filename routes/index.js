@@ -92,11 +92,20 @@ exports.isThisSpam = function(req, res, next) {
 
 exports.testTokenize = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
-        if (!authenticated) {
+
+	if (error) {
+	    console.log(error);
+            res.writeHead(500, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify(err.message));
+	    return;
+	}
+
+	if (!authenticated) {
             res.writeHead(401, {'Content-Type': 'application/json'});
             res.end(JSON.stringify("Not authorized"));
             return;
         }
+
         var tokens = Tokenizer.tokenize(req.body);
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify(tokens));
