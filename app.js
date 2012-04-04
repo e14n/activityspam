@@ -92,7 +92,7 @@ db.connect({}, function(err) {
 
         SpamFilter.db = db;
 
-        server.on('listening', function() {
+        app.on('listening', function() {
             // Drop privs if needed
             process.setuid(config.serverUser);
         });
