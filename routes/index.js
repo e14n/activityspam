@@ -16,6 +16,9 @@
 
 // Training and measuring values
 
+var Tokenizer = require('../lib/tokenizer').Tokenizer,
+    SpamFilter = require('../lib/spamfilter').SpamFilter;
+
 exports.thisIsSpam = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
         if (!authenticated) {
