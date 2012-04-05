@@ -43,15 +43,9 @@
             <ul class="nav">
               <li><a href="/">Home</a></li>
               <li><a href="/api">API</a></li>
+              <li><a href="/login">Login</a></li>
             </ul>
           </div><!--/.nav-collapse -->
-          <div class="pull-right">
-            <div class="nav-collapse">
-              <ul class="nav">
-                <li><a href="/login">Login</a></li>
-              </ul>
-            </div><!--/.nav-collapse -->
-          </div>
         </div>
       </div>
     </div>
