@@ -41,10 +41,8 @@
           <a class="brand" href="#"><%- site %></a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="/">Home</a></li>
-              <li><a href="/about">About</a></li>
+              <li><a href="/">Home</a></li>
               <li><a href="/api">API</a></li>
-              <li><a href="/contact">Contact</a></li>
             </ul>
           </div><!--/.nav-collapse -->
           <div class="pull-right">
