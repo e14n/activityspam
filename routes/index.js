@@ -25,6 +25,11 @@ exports.index = function(req, res, next) {
 			  site: (config.site) ? config.site : "ActivitySpam" });
 };
 
+exports.api = function(req, res, next) {
+    res.render('api', { title: 'API', 
+			  site: (config.site) ? config.site : "ActivitySpam" });
+};
+
 exports.thisIsSpam = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
         if (!authenticated) {

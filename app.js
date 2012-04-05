@@ -69,6 +69,7 @@ app.configure('production', function() {
 // Routes
 
 app.get('/', routes.index);
+app.get('/api', routes.api);
 app.post('/is-this-spam', routes.isThisSpam);
 app.post('/this-is-spam', routes.thisIsSpam);
 app.post('/this-is-ham', routes.thisIsHam);

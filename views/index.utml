@@ -1,3 +1,4 @@
 <h1><%- site %></h1>
 
-<p>Welcome to <%- site %>.</p>
+<p>This is <%- site %>. It's a service that checks <a href="http://activitystrea.ms/">Activity Streams</a> objects for spam.</p>
+
