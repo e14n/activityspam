@@ -1,0 +1,17 @@
+<h1>Register</h1>
+
+<form class="form-horizontal" action="/register" method="post">
+  <fieldset>
+    <div class="control-group">
+      <label class="control-label" for="username">Email</label>
+      <label class="control-label" for="password">Password</label>
+      <label class="control-label" for="password">Confirm</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" id="email" name="email" />
+        <input type="password" class="input-xlarge" id="password" name="password" />
+        <input type="password" class="input-xlarge" id="confirm" name="confirm" />
+        <input type="submit" value="Register" />
+      </div>
+    </div>
+  </fieldset>
+</form>

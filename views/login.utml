@@ -1,0 +1,15 @@
+<h1>Login</h1>
+
+<form class="form-horizontal" action="/login" method="post">
+  <fieldset>
+    <div class="control-group">
+      <label class="control-label" for="username">Email</label>
+      <label class="control-label" for="password">Password</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" id="email" name="email" />
+        <input type="password" class="input-xlarge" id="password" name="password" />
+        <input type="submit" value="Login" />
+      </div>
+    </div>
+  </fieldset>
+</form>

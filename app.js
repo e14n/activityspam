@@ -70,6 +70,10 @@ app.configure('production', function() {
 
 app.get('/', routes.index);
 app.get('/api', routes.api);
+app.get('/login', routes.loginForm);
+app.get('/register', routes.registerForm);
+app.post('/login', routes.login);
+app.post('/register', routes.register);
 app.post('/is-this-spam', routes.isThisSpam);
 app.post('/this-is-spam', routes.thisIsSpam);
 app.post('/this-is-ham', routes.thisIsHam);
