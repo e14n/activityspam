@@ -5,21 +5,21 @@
     <div class="control-group">
       <label class="control-label" for="username">Email</label>
       <div class="controls">
-        <input type="text" class="input-xlarge" id="email" name="email" />
+        <input type="text" class="input-medium" id="email" name="email" />
       </div>
       <p class="help-block">An email address we can use to contact you.</p>
     </div>
     <div class="control-group">
       <label class="control-label" for="password">Password</label>
       <div class="controls">
-        <input type="password" class="input-xlarge" id="password" name="password" />
+        <input type="password" class="input-medium" id="password" name="password" />
       </div>
       <p class="help-block">A password; make it good!</p>
     </div>
     <div class="control-group">
       <label class="control-label" for="password">Confirm</label>
       <div class="controls">
-        <input type="password" class="input-xlarge" id="confirm" name="confirm" />
+        <input type="password" class="input-medium" id="confirm" name="confirm" />
       </div>
     </div>
     <div class="form-actions">
