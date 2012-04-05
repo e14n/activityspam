@@ -27,44 +27,44 @@ exports.index = function(req, res, next) {
 
 exports.api = function(req, res, next) {
     res.render('api', { title: 'API', 
-			  site: (config.site) ? config.site : "ActivitySpam" });
+			site: (config.site) ? config.site : "ActivitySpam" });
 };
 
 exports.thisIsSpam = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
-        if (!authenticated) {
-            res.writeHead(401, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify("Not authorized"));
-            return;
-        }
-        SpamFilter.train('spam', req.body, function(err, trainrec) {
-            if (err) {
-                res.writeHead(500, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify({error: err.message}));
-            } else {
-                res.writeHead(200, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify(trainrec));
-            }
-        });
+	if (!authenticated) {
+	    res.writeHead(401, {'Content-Type': 'application/json'});
+	    res.end(JSON.stringify("Not authorized"));
+	    return;
+	}
+	SpamFilter.train('spam', req.body, function(err, trainrec) {
+	    if (err) {
+		res.writeHead(500, {'Content-Type': 'application/json'});
+		res.end(JSON.stringify({error: err.message}));
+	    } else {
+		res.writeHead(200, {'Content-Type': 'application/json'});
+		res.end(JSON.stringify(trainrec));
+	    }
+	});
     });
 };
 
 exports.thisIsHam = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
-        if (!authenticated) {
-            res.writeHead(401, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify("Not authorized"));
-            return;
-        }
-        SpamFilter.train('ham', req.body, function(err, trainrec) {
-            if (err) {
-                res.writeHead(500, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify({error: err.message}));
-            } else {
-                res.writeHead(200, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify(trainrec));
-            }
-        });
+	if (!authenticated) {
+	    res.writeHead(401, {'Content-Type': 'application/json'});
+	    res.end(JSON.stringify("Not authorized"));
+	    return;
+	}
+	SpamFilter.train('ham', req.body, function(err, trainrec) {
+	    if (err) {
+		res.writeHead(500, {'Content-Type': 'application/json'});
+		res.end(JSON.stringify({error: err.message}));
+	    } else {
+		res.writeHead(200, {'Content-Type': 'application/json'});
+		res.end(JSON.stringify(trainrec));
+	    }
+	});
     });
 };
 
@@ -72,9 +72,9 @@ var uniq = function(arr) {
     var newArr = [], i;
 
     for (i = 0; i < arr.length; i++) {
-        if (newArr.indexOf(arr[i]) == -1) {
-            newArr.push(arr[i]);
-        }
+	if (newArr.indexOf(arr[i]) == -1) {
+	    newArr.push(arr[i]);
+	}
     }
 
     return newArr;
@@ -84,23 +84,23 @@ exports.isThisSpam = function(req, res, next) {
 
     req.authenticate(['oauth'], function(error, authenticated) { 
 
-        if (!authenticated) {
-            res.writeHead(401, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify("Not authorized"));
-            return;
-        }
+	if (!authenticated) {
+	    res.writeHead(401, {'Content-Type': 'application/json'});
+	    res.end(JSON.stringify("Not authorized"));
+	    return;
+	}
 
-        var tokens = uniq(Tokenizer.tokenize(req.body));
+	var tokens = uniq(Tokenizer.tokenize(req.body));
 
-        SpamFilter.test(tokens, function(err, decision) {
-            if (err) {
-                res.writeHead(500, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify(err.message));
-            } else {
-                res.writeHead(200, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify(decision));
-            }
-        });
+	SpamFilter.test(tokens, function(err, decision) {
+	    if (err) {
+		res.writeHead(500, {'Content-Type': 'application/json'});
+		res.end(JSON.stringify(err.message));
+	    } else {
+		res.writeHead(200, {'Content-Type': 'application/json'});
+		res.end(JSON.stringify(decision));
+	    }
+	});
     });
 };
 
@@ -109,15 +109,15 @@ exports.testTokenize = function(req, res, next) {
 
 	if (error) {
 	    console.log(error);
-            res.writeHead(500, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify(err.message));
+	    res.writeHead(500, {'Content-Type': 'application/json'});
+	    res.end(JSON.stringify(err.message));
 	    return;
 	}
 
 	if (authenticated) {
-            var tokens = Tokenizer.tokenize(req.body);
-            res.writeHead(200, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify(tokens));
+	    var tokens = Tokenizer.tokenize(req.body);
+	    res.writeHead(200, {'Content-Type': 'application/json'});
+	    res.end(JSON.stringify(tokens));
 	}
     });
 };
