@@ -54,23 +54,23 @@ exports.login = function(req, res, next) {
                                   site: (config.site) ? config.site : "ActivitySpam" });
         };
 
-    if (!_(req.params).has('email')) {
+    if (!_(req.body).has('email')) {
         showError("No email.");
         return;
     }
 
-    if (!_(req.params).has('password')) {
+    if (!_(req.body).has('password')) {
         showError("No password.");
         return;
     }
 
-    User.get(req.params.email, function(err, user) {
+    User.get(req.body.email, function(err, user) {
         if (err) {
             showError("Incorrect email or password.");
             return;
         }
 
-        user.checkPassword(req.params.password, function(err, match) {
+        user.checkPassword(req.body.password, function(err, match) {
             if (!match) {
                 showError("Incorrect email or password.");
                 return;
@@ -89,33 +89,33 @@ exports.register = function(req, res, next) {
                                      site: (config.site) ? config.site : "ActivitySpam" });
         };
 
-    if (!_(req.params).has('email')) {
+    if (!_(req.body).has('email')) {
         showError("No email.");
         return;
     }
 
-    email = req.params.email;
+    email = req.body.email;
 
-    if (!_(req.params).has('password')) {
+    if (!_(req.body).has('password')) {
         showError("No password.");
         return;
     }
 
-    password = req.params.password;
+    password = req.body.password;
 
-    if (!_(req.params).has('confirm')) {
+    if (!_(req.body).has('confirm')) {
         showError("No password confirmation.");
         return;
     }
 
-    confirm = req.params.confirm;
+    confirm = req.body.confirm;
 
     if (confirm !== password) {
         showError("Passwords don't match.");
         return;
     }
 
-    User.get(req.params.email, function(err, old) {
+    User.get(req.body.email, function(err, old) {
         var newUser;
         if (old) {
             showError("User already exists");
