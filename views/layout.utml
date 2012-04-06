@@ -43,7 +43,11 @@
             <ul class="nav">
               <li><a href="/">Home</a></li>
               <li><a href="/api">API</a></li>
+              <% if (user) { %>
+              <li><a href="/apps">Apps</a></li>
+              <% } else { %>
               <li><a href="/login">Login</a></li>
+              <% } %>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

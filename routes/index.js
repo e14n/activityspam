@@ -17,6 +17,9 @@
 // Training and measuring values
 
 var config = require('../config'),
+    _ = require('underscore'),
+    User = require('../models/user').User,
+    NoSuchThingError = require('databank').NoSuchThingError,
     Tokenizer = require('../lib/tokenizer').Tokenizer,
     SpamFilter = require('../lib/spamfilter').SpamFilter;
 
@@ -41,9 +44,93 @@ exports.registerForm = function(req, res, next) {
 };
 
 exports.login = function(req, res, next) {
+
+    var user, email, password,
+        showError = function(message) {
+            res.render('login', { title: 'Login',
+                                  error: message,
+                                  site: (config.site) ? config.site : "ActivitySpam" });
+        };
+
+    if (!_(req.params).has('email')) {
+        showError("No email.");
+        return;
+    }
+
+    if (!_(req.params).has('password')) {
+        showError("No password.");
+        return;
+    }
+
+    User.get(req.params.email, function(err, user) {
+        if (err) {
+            showError("Incorrect email or password.");
+            return;
+        }
+
+        user.checkPassword(req.params.password, function(err, match) {
+            if (!match) {
+                showError("Incorrect email or password.");
+                return;
+            }
+            req.session.email = email;
+            res.redirect('/apps', 303);
+        });
+    });
 };
 
 exports.register = function(req, res, next) {
+    var user, email, password,
+        showError = function(message) {
+            res.render('register', { title: 'Register',
+                                     error: message,
+                                     site: (config.site) ? config.site : "ActivitySpam" });
+        };
+
+    if (!_(req.params).has('email')) {
+        showError("No email.");
+        return;
+    }
+
+    email = req.params.email;
+
+    if (!_(req.params).has('password')) {
+        showError("No password.");
+        return;
+    }
+
+    password = req.params.password;
+
+    if (!_(req.params).has('confirm')) {
+        showError("No password confirmation.");
+        return;
+    }
+
+    confirm = req.params.confirm;
+
+    if (confirm !== password) {
+        showError("Passwords don't match.");
+        return;
+    }
+
+    User.get(req.params.email, function(err, old) {
+        var newUser;
+        if (old) {
+            showError("User already exists");
+            return;
+        }
+        newUser = {email: email,
+                   password: password};
+        User.create(newUser, function(err, user) {
+            req.session.email = email;
+            res.redirect('/apps', 303);
+        });
+    });
+};
+
+exports.apps = function(req, res, next) {
+    res.render('apps', { title: 'Apps', 
+                          site: (config.site) ? config.site : "ActivitySpam" });
 };
 
 exports.thisIsSpam = function(req, res, next) {

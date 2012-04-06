@@ -6,6 +6,7 @@
 		      "connect-auth": ">= 0.5.1",
                       "databank": "0.x",
 		      "dateformat": "1.x",
+		      "bcrypt": "*",
                       "underscore": "*",
 		      "utml": "*",
                       "step": "*",

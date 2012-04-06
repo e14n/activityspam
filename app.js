@@ -26,6 +26,7 @@ var connect = require('connect'),
     _ = require('underscore'),
     express = require('express'),
     routes = require('./routes'),
+    User = require('./models/user').User,
     params, server, db;
 
 params = config.params;
@@ -53,6 +54,8 @@ app.configure(function() {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'utml');
     app.use(express.bodyParser());
+    app.use(express.cookieParser());
+    app.use(express.session({ secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure" }));
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(__dirname + '/public'));
@@ -68,12 +71,49 @@ app.configure('production', function() {
 
 // Routes
 
-app.get('/', routes.index);
-app.get('/api', routes.api);
-app.get('/login', routes.loginForm);
-app.get('/register', routes.registerForm);
-app.post('/login', routes.login);
-app.post('/register', routes.register);
+var sessionUser = function(req, res, next) {
+    res.local('user', null);
+    req.user = null;
+    if (!_(req.session).has('email')) {
+        next();
+    } else {
+        User.get(req.session.email, function(err, user) {
+            if (!err) {
+                res.local('user', user);
+                req.user = user;
+            }
+            next();
+        });
+    }
+};
+
+var notLoggedIn = function(req, res, next) {
+    if (req.user) {
+        next(new Error("Must not be logged in."));
+    } else {
+        next();
+    }
+};
+
+var loggedIn = function(req, res, next) {
+    if (!req.user) {
+        next(new Error("Must be logged in."));
+    } else {
+        next();
+    }
+};
+
+app.get('/', sessionUser, routes.index);
+app.get('/api', sessionUser, routes.api);
+
+app.get('/login', sessionUser, notLoggedIn, routes.loginForm);
+app.post('/login', sessionUser, notLoggedIn, routes.login);
+
+app.get('/register', sessionUser, notLoggedIn, routes.registerForm);
+app.post('/register', sessionUser, notLoggedIn, routes.register);
+
+app.get('/apps', sessionUser, loggedIn, routes.apps);
+
 app.post('/is-this-spam', routes.isThisSpam);
 app.post('/this-is-spam', routes.thisIsSpam);
 app.post('/this-is-ham', routes.thisIsHam);
