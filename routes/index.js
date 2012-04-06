@@ -35,11 +35,13 @@ exports.api = function(req, res, next) {
 
 exports.loginForm = function(req, res, next) {
     res.render('login', { title: 'Login', 
+                          error: null,
                           site: (config.site) ? config.site : "ActivitySpam" });
 };
 
 exports.registerForm = function(req, res, next) {
     res.render('register', { title: 'Register', 
+                             error: null,
                              site: (config.site) ? config.site : "ActivitySpam" });
 };
 
