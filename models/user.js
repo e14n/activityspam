@@ -22,12 +22,12 @@ var databank = require('databank'),
 
 var User = DatabankObject.subClass('user');
 
-User.schema = {pkey: 'email', 
-               fields: ['email',
-                        'hash',
-                        'apps',
-                        'created',
-                        'updated']};
+User.schema = {user: {pkey: 'email', 
+		      fields: ['email',
+                               'hash',
+                               'apps',
+                               'created',
+                               'updated']}};
 
 User.prototype.checkPassword = function(cleartext, callback) {
     bcrypt.compare(cleartext, this.hash, callback);
