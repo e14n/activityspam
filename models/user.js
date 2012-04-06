@@ -75,7 +75,7 @@ User.create = function(properties, callback) {
         bcrypt.hash(properties.password, salt, function(err, hash) {
             properties.hash = hash;
             delete properties.password;
-            this.defaultCreate(properties, callback);
+            User.defaultCreate(properties, callback);
         });
     });
 };
