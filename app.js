@@ -18,6 +18,7 @@ var connect = require('connect'),
     auth = require('connect-auth'),
     databank = require('databank'),
     Databank = databank.Databank,
+    DatabankObject = databank.DatabankObject,
     NoSuchThingError = databank.NoSuchThingError,
     config = require('./config'),
     Tokenizer = require('./lib/tokenizer').Tokenizer,
@@ -136,6 +137,7 @@ db.connect({}, function(err) {
     } else {
 
         SpamFilter.db = db;
+        DatabankObject.bank = db;
 
         app.on('listening', function() {
             // Drop privs if needed
