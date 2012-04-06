@@ -38,6 +38,7 @@ if (!_(params).has('schema')) {
 
 _.extend(params.schema, SpamFilter.schema);
 _.extend(params.schema, Provider.schema);
+_.extend(params.schema, User.schema);
 
 db = Databank.get(config.driver, params);
 
