@@ -45,8 +45,10 @@
               <li><a href="/api">API</a></li>
               <% if (user) { %>
               <li><a href="/apps">Apps</a></li>
+              <li><a href="/logout">Logout</a></li>
               <% } else { %>
               <li><a href="/login">Login</a></li>
+              <li><a href="/register">Register</a></li>
               <% } %>
             </ul>
           </div><!--/.nav-collapse -->

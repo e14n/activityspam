@@ -130,6 +130,11 @@ exports.register = function(req, res, next) {
     });
 };
 
+exports.logout = function(req, res, next) {
+    req.session.email = null;
+    res.redirect('/', 302);
+};
+
 exports.apps = function(req, res, next) {
     res.render('apps', { title: 'Apps', 
                           site: (config.site) ? config.site : "ActivitySpam" });

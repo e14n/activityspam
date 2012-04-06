@@ -114,6 +114,8 @@ app.post('/login', sessionUser, notLoggedIn, routes.login);
 app.get('/register', sessionUser, notLoggedIn, routes.registerForm);
 app.post('/register', sessionUser, notLoggedIn, routes.register);
 
+app.get('/logout', sessionUser, loggedIn, routes.logout);
+
 app.get('/apps', sessionUser, loggedIn, routes.apps);
 
 app.post('/is-this-spam', routes.isThisSpam);
