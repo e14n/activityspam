@@ -59,18 +59,22 @@ exports.login = function(req, res, next) {
         return;
     }
 
+    email = req.body.email;
+
     if (!_(req.body).has('password')) {
         showError("No password.");
         return;
     }
 
-    User.get(req.body.email, function(err, user) {
+    password = req.body.password;
+
+    User.get(email, function(err, user) {
         if (err) {
             showError("Incorrect email or password.");
             return;
         }
 
-        user.checkPassword(req.body.password, function(err, match) {
+        user.checkPassword(password, function(err, match) {
             if (!match) {
                 showError("Incorrect email or password.");
                 return;
@@ -115,7 +119,7 @@ exports.register = function(req, res, next) {
         return;
     }
 
-    User.get(req.body.email, function(err, old) {
+    User.get(email, function(err, old) {
         var newUser;
         if (old) {
             showError("User already exists");
