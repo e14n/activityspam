@@ -18,16 +18,18 @@ var databank = require('databank'),
     dateFormat = require('dateformat'),
     bcrypt  = require('bcrypt'),
     _ = require('underscore'),
-    DatabankObject = databank.DatabankObject;
+    DatabankObject = databank.DatabankObject,
+    NoSuchThingError = databank.NoSuchThingError,
+    App = require('./app');
 
 var User = DatabankObject.subClass('user');
 
 User.schema = {user: {pkey: 'email', 
-		      fields: ['email',
+                      fields: ['email',
                                'hash',
-                               'apps',
                                'created',
-                               'updated']}};
+                               'updated']},
+               applist: {pkey: 'email'}};
 
 User.prototype.checkPassword = function(cleartext, callback) {
     bcrypt.compare(cleartext, this.hash, callback);
@@ -64,7 +66,7 @@ User.defaultCreate = User.create;
 User.create = function(properties, callback) {
 
     if (!properties.email || !properties.password) {
-	callback(new Error('Gotta have a email and a password.'), null);
+        callback(new Error('Gotta have a email and a password.'), null);
     }
 
     var now = dateFormat(new Date(), "isoDateTime", true);
@@ -77,6 +79,20 @@ User.create = function(properties, callback) {
             delete properties.password;
             User.defaultCreate(properties, callback);
         });
+    });
+};
+
+User.prototype.getApps = function(callback) {
+    User.bank().read('applist', this.email, function(err, apps) {
+        if (err) {
+            if (err instanceof NoSuchThingError) {
+                callback(null, []);
+            } else {
+                callback(err, null);
+            }
+        } else {
+            App.readAll(apps, callback);
+        }
     });
 };
 

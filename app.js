@@ -118,6 +118,9 @@ app.post('/register', sessionUser, notLoggedIn, web.register);
 app.get('/logout', sessionUser, loggedIn, web.logout);
 
 app.get('/apps', sessionUser, loggedIn, web.apps);
+app.get('/app/add', sessionUser, loggedIn, web.addApp);
+app.get('/app/remove', sessionUser, loggedIn, web.removeApp);
+app.get('/app/edit', sessionUser, loggedIn, web.editApp);
 
 app.post('/is-this-spam', api.isThisSpam);
 app.post('/this-is-spam', api.thisIsSpam);

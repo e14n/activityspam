@@ -1,6 +1,6 @@
 // Web UI for activity spam checker
 //
-// Copyright 2011, 2012 StatusNet Inc.
+// Copyright 2012 StatusNet Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -138,6 +138,13 @@ exports.logout = function(req, res, next) {
 };
 
 exports.apps = function(req, res, next) {
-    res.render('apps', { title: 'Apps', 
-                          site: (config.site) ? config.site : "ActivitySpam" });
+    req.user.getApps(function(err, apps) {
+        if (err) {
+            next(err);
+            return;
+        }
+        res.render('apps', { title: 'Apps', 
+                             apps: apps,
+                             site: (config.site) ? config.site : "ActivitySpam" });
+    });
 };

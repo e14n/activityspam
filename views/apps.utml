@@ -1,3 +1,19 @@
 <h1>Apps</h1>
 
-<p>Apps go here.</p>
+<p>These are the apps you're responsible for.</p>
+
+<% _.each(apps, function(app) { %>
+<div class="app-block">
+  <h2><%= app.title %></h2>
+  <dl>
+    <dt>Description</dt>
+    <dd><%= app.description %></dd>
+    <dt>Domain</dt>
+    <dd><%= app.domain %></dd>
+    <dt>Consumer key</dt>
+    <dd><%= app.consumer_key %></dd>
+    <dt>Secret (shh!)</dt>
+    <dd><%= app.secret %></dd>
+  </dl>
+</div>
+<% }); %>
