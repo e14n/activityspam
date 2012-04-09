@@ -26,7 +26,8 @@ var connect = require('connect'),
     Provider = require('./lib/provider').Provider,
     _ = require('underscore'),
     express = require('express'),
-    routes = require('./routes'),
+    web = require('./routes/web'),
+    api = require('./routes/api'),
     User = require('./models/user').User,
     params, server, db;
 
@@ -105,23 +106,23 @@ var loggedIn = function(req, res, next) {
     }
 };
 
-app.get('/', sessionUser, routes.index);
-app.get('/api', sessionUser, routes.api);
+app.get('/', sessionUser, web.index);
+app.get('/api', sessionUser, web.api);
 
-app.get('/login', sessionUser, notLoggedIn, routes.loginForm);
-app.post('/login', sessionUser, notLoggedIn, routes.login);
+app.get('/login', sessionUser, notLoggedIn, web.loginForm);
+app.post('/login', sessionUser, notLoggedIn, web.login);
 
-app.get('/register', sessionUser, notLoggedIn, routes.registerForm);
-app.post('/register', sessionUser, notLoggedIn, routes.register);
+app.get('/register', sessionUser, notLoggedIn, web.registerForm);
+app.post('/register', sessionUser, notLoggedIn, web.register);
 
-app.get('/logout', sessionUser, loggedIn, routes.logout);
+app.get('/logout', sessionUser, loggedIn, web.logout);
 
-app.get('/apps', sessionUser, loggedIn, routes.apps);
+app.get('/apps', sessionUser, loggedIn, web.apps);
 
-app.post('/is-this-spam', routes.isThisSpam);
-app.post('/this-is-spam', routes.thisIsSpam);
-app.post('/this-is-ham', routes.thisIsHam);
-app.post('/tokenize', routes.testTokenize);
+app.post('/is-this-spam', api.isThisSpam);
+app.post('/this-is-spam', api.thisIsSpam);
+app.post('/this-is-ham', api.thisIsHam);
+app.post('/tokenize', api.testTokenize);
 
 // Set the tokenizer options
 
