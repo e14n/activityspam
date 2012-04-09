@@ -29,6 +29,7 @@ var connect = require('connect'),
     web = require('./routes/web'),
     api = require('./routes/api'),
     User = require('./models/user').User,
+    App = require('./models/app').App,
     params, server, db;
 
 params = config.params;
@@ -38,13 +39,13 @@ if (!_(params).has('schema')) {
 }
 
 _.extend(params.schema, SpamFilter.schema);
-_.extend(params.schema, Provider.schema);
 _.extend(params.schema, User.schema);
+_.extend(params.schema, App.schema);
 
 db = Databank.get(config.driver, params);
 
 var app = module.exports = express.createServer(
-    auth([auth.Oauth({oauth_provider: new Provider(db),
+    auth([auth.Oauth({oauth_provider: new Provider(),
                       authenticate_provider: null,
                       authorize_provider: null,
                       authorization_finished_provider: null
