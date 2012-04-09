@@ -130,9 +130,9 @@ app.post('/register', webSite, notLoggedIn, web.register);
 app.get('/logout', webSite, loggedIn, web.logout);
 
 app.get('/apps', webSite, loggedIn, web.apps);
-app.get('/app/add', webSite, loggedIn, web.addApp);
-app.get('/app/remove', webSite, loggedIn, web.removeApp);
-app.get('/app/edit', webSite, loggedIn, web.editApp);
+app.post('/app/add', webSite, loggedIn, web.addApp);
+app.post('/app/remove', webSite, loggedIn, web.removeApp);
+app.post('/app/edit', webSite, loggedIn, web.editApp);
 
 app.post('/is-this-spam', api.isThisSpam);
 app.post('/this-is-spam', api.thisIsSpam);

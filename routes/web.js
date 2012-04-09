@@ -17,6 +17,7 @@
 var config = require('../config'),
     _ = require('underscore'),
     User = require('../models/user').User,
+    App = require('../models/app').App,
     NoSuchThingError = require('databank').NoSuchThingError,
     Tokenizer = require('../lib/tokenizer').Tokenizer,
     SpamFilter = require('../lib/spamfilter').SpamFilter;
@@ -139,5 +140,92 @@ exports.apps = function(req, res, next) {
         }
         res.render('apps', { title: 'Apps', 
                              apps: apps });
+    });
+};
+
+exports.addApp = function(req, res, next) {
+
+    var props = {},
+	fields = ['title', 'host', 'description'],
+	i,
+	field;
+
+    for (i in fields) {
+	field = fields[i];
+
+	if (!_(req.body).has(field)) {
+	    next(new Error("No " + field));
+            return;
+	}
+
+	props[field] = req.body[field];
+    }
+
+    App.create(props, function(err, app) {
+	if (err) {
+	    next(err);
+	    return;
+	}
+	res.json(app);
+    });
+};
+
+exports.removeApp = function(req, res, next) {
+    var key;
+
+    if (!_(req.body).has('consumer_key')) {
+	next(new Error("No key"));
+        return;
+    }
+
+    key = req.body.consumer_key;
+
+    App.get(key, function(err, app) {
+	if (err) {
+	    next(err);
+	    return;
+	}
+	app.del(function(err) {
+	    if (err) {
+		next(err);
+		return;
+	    }
+	    res.json({success: true});
+	});
+    });
+};
+
+exports.updateApp = function(req, res, next) {
+
+    var props = {},
+	fields = ['title', 'host', 'description', 'consumer_key'],
+	i,
+	field;
+
+    for (i in fields) {
+
+	field = fields[i];
+
+	if (!_(req.body).has(field)) {
+	    next(new Error("No " + field));
+            return;
+	}
+
+	props[field] = req.body[field];
+    }
+
+    App.get(props.consumer_key, function(err, app) {
+
+	if (err) {
+	    next(err);
+	    return;
+	}
+	app.update(props, function(err) {
+	    if (err) {
+		next(err);
+		return;
+	    }
+	    res.json({success: true});
+	});
     });
 };

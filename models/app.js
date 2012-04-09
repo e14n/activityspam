@@ -98,4 +98,18 @@ App.create = function(properties, callback) {
     }
 };
 
+App.prototype.defaultUpdate = App.prototype.update;
+
+App.prototype.update = function(newApp, callback) {
+
+    var now = dateFormat(new Date(), "isoDateTime", true);
+
+    newApp.updated      = now;
+    newApp.created      = this.created;
+    newApp.consumer_key = this.consumer_key;
+    newApp.secret       = this.secret;
+
+    this.defaultUpdate(newApp, callback);
+};
+
 exports.App = App;

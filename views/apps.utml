@@ -17,3 +17,12 @@
   </dl>
 </div>
 <% }); %>
+
+<div class="app-add">
+  <form id="app-add-form" class="well form-inline">
+    <input type="text" class="input-medium" placeholder="title">
+    <input type="text" class="input-medium" placeholder="description">
+    <input type="text" class="input-medium" placeholder="host">
+    <button type="submit" class="btn">Add</button>
+  </form>
+</div>
