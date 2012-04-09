@@ -62,6 +62,10 @@ app.configure(function() {
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(__dirname + '/public'));
+    app.use(function(req, res, next) { 
+	res.local('site', (config.site) ? config.site : "ActivitySpam");
+	next();
+    });
 });
 
 app.configure('development', function() {

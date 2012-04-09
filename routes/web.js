@@ -22,25 +22,21 @@ var config = require('../config'),
     SpamFilter = require('../lib/spamfilter').SpamFilter;
 
 exports.index = function(req, res, next) {
-    res.render('index', { title: 'Home', 
-                          site: (config.site) ? config.site : "ActivitySpam" });
+    res.render('index', { title: 'Home' });
 };
 
 exports.api = function(req, res, next) {
-    res.render('api', { title: 'API', 
-                        site: (config.site) ? config.site : "ActivitySpam" });
+    res.render('api', { title: 'API' });
 };
 
 exports.loginForm = function(req, res, next) {
     res.render('login', { title: 'Login', 
-                          error: null,
-                          site: (config.site) ? config.site : "ActivitySpam" });
+                          error: null });
 };
 
 exports.registerForm = function(req, res, next) {
     res.render('register', { title: 'Register', 
-                             error: null,
-                             site: (config.site) ? config.site : "ActivitySpam" });
+                             error: null });
 };
 
 exports.login = function(req, res, next) {
@@ -48,8 +44,7 @@ exports.login = function(req, res, next) {
     var user, email, password,
         showError = function(message) {
             res.render('login', { title: 'Login',
-                                  error: message,
-                                  site: (config.site) ? config.site : "ActivitySpam" });
+                                  error: message });
         };
 
     if (!_(req.body).has('email')) {
@@ -87,8 +82,7 @@ exports.register = function(req, res, next) {
     var user, email, password,
         showError = function(message) {
             res.render('register', { title: 'Register',
-                                     error: message,
-                                     site: (config.site) ? config.site : "ActivitySpam" });
+                                     error: message });
         };
 
     if (!_(req.body).has('email')) {
@@ -144,7 +138,6 @@ exports.apps = function(req, res, next) {
             return;
         }
         res.render('apps', { title: 'Apps', 
-                             apps: apps,
-                             site: (config.site) ? config.site : "ActivitySpam" });
+                             apps: apps });
     });
 };
