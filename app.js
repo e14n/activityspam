@@ -57,10 +57,10 @@ app.configure(function() {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'utml');
     app.use(express.logger());
-    app.use(express.bodyParser());
     app.use(express.cookieParser());
     app.use(express.session({ secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure" }));
     app.use(express.methodOverride());
+    app.use(express.bodyParser());
     app.use(function(req, res, next) { 
 	res.local('site', (config.site) ? config.site : "ActivitySpam");
 	next();
@@ -111,21 +111,28 @@ var loggedIn = function(req, res, next) {
     }
 };
 
-app.get('/', sessionUser, web.index);
-app.get('/api', sessionUser, web.api);
+var webSite = [
+    express.cookieParser(),
+    express.session({ secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure" }),
+    express.methodOverride(),
+    sessionUser
+];
 
-app.get('/login', sessionUser, notLoggedIn, web.loginForm);
-app.post('/login', sessionUser, notLoggedIn, web.login);
+app.get('/', webSite, web.index);
+app.get('/api', webSite, web.api);
 
-app.get('/register', sessionUser, notLoggedIn, web.registerForm);
-app.post('/register', sessionUser, notLoggedIn, web.register);
+app.get('/login', webSite, notLoggedIn, web.loginForm);
+app.post('/login', webSite, notLoggedIn, web.login);
 
-app.get('/logout', sessionUser, loggedIn, web.logout);
+app.get('/register', webSite, notLoggedIn, web.registerForm);
+app.post('/register', webSite, notLoggedIn, web.register);
 
-app.get('/apps', sessionUser, loggedIn, web.apps);
-app.get('/app/add', sessionUser, loggedIn, web.addApp);
-app.get('/app/remove', sessionUser, loggedIn, web.removeApp);
-app.get('/app/edit', sessionUser, loggedIn, web.editApp);
+app.get('/logout', webSite, loggedIn, web.logout);
+
+app.get('/apps', webSite, loggedIn, web.apps);
+app.get('/app/add', webSite, loggedIn, web.addApp);
+app.get('/app/remove', webSite, loggedIn, web.removeApp);
+app.get('/app/edit', webSite, loggedIn, web.editApp);
 
 app.post('/is-this-spam', api.isThisSpam);
 app.post('/this-is-spam', api.thisIsSpam);
