@@ -21,11 +21,9 @@ var Tokenizer = require('../lib/tokenizer').Tokenizer,
 
 exports.thisIsSpam = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
-        if (!authenticated) {
-            res.writeHead(401, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify("Not authorized"));
-            return;
-        }
+	if (error) {
+	    return;
+	}
         SpamFilter.train('spam', req.body, function(err, trainrec) {
             if (err) {
                 res.writeHead(500, {'Content-Type': 'application/json'});
@@ -40,11 +38,9 @@ exports.thisIsSpam = function(req, res, next) {
 
 exports.thisIsHam = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
-        if (!authenticated) {
-            res.writeHead(401, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify("Not authorized"));
-            return;
-        }
+	if (error) {
+	    return;
+	}
         SpamFilter.train('ham', req.body, function(err, trainrec) {
             if (err) {
                 res.writeHead(500, {'Content-Type': 'application/json'});
@@ -73,11 +69,9 @@ exports.isThisSpam = function(req, res, next) {
 
     req.authenticate(['oauth'], function(error, authenticated) { 
 
-        if (!authenticated) {
-            res.writeHead(401, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify("Not authorized"));
-            return;
-        }
+	if (error) {
+	    return;
+	}
 
         var tokens = uniq(Tokenizer.tokenize(req.body));
 
@@ -96,12 +90,9 @@ exports.isThisSpam = function(req, res, next) {
 exports.testTokenize = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
 
-        if (error) {
-            console.log(error);
-            res.writeHead(500, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify(err.message));
-            return;
-        }
+	if (error) {
+	    return;
+	}
 
         if (authenticated) {
             var tokens = Tokenizer.tokenize(req.body);
