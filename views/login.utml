@@ -1,6 +1,8 @@
 <h1>Login</h1>
 
-<p class="error"><%= error %></p>
+<% if (error) { %>
+<p class="alert alert-error"><%= error %></p>
+<% } %>
 
 <form class="form-horizontal" action="/login" method="post">
   <fieldset>
