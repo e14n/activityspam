@@ -56,6 +56,7 @@ var app = module.exports = express.createServer(
 app.configure(function() {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'utml');
+    app.use(express.logger());
     app.use(express.bodyParser());
     app.use(express.cookieParser());
     app.use(express.session({ secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure" }));
