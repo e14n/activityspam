@@ -62,8 +62,7 @@
   <dd> An MD5 hash of the trained object.</dd>
 </dl>
 
-<p><b>Note</dt>
-<dd>: After the initial training, it's more effective to
+<p><b>Note</b>: After the initial training, it's more effective to
   train a Bayesian filter only when its current results are wrong. So,
   call <code>/is-this-spam</code> first.</p>
 
