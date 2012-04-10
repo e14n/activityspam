@@ -151,6 +151,10 @@ exports.removeAppForm = function(req, res, next) {
     res.render('removeapp', { title: 'Delete an app' });
 };
 
+exports.editAppForm = function(req, res, next) {
+    res.render('editapp', { title: 'Edit an app' });
+};
+
 exports.addApp = function(req, res, next) {
 
     var props = {},
