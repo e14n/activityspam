@@ -10,10 +10,10 @@
 <h2>Authentication</h2>
 
 <p>The API methods require <a href="http://oauth.net/">OAuth 1.0</a>
-for authorization.</p>
+  for authorization.</p>
 
 <p>You don't need to provide a token or get one; just get a consumer
-key and secret by <a href="/login">logging in</a>.</p>
+  key and secret by <a href="/login">logging in</a>.</p>
 
 <h2>Methods</h2>
 
@@ -25,34 +25,45 @@ key and secret by <a href="/login">logging in</a>.</p>
 
 <p>The result is a JSON document with a single object with the following attributes:</p>
 
-<ul>
+<dl>
 
-  <li><b>probability</b> The probability the object is spam. A
+  <dt>probability</dt>
+  <dd>The probability the object is spam. A
     number between 0 and 1, inclusive. Typical values cluster close to
-    0 and 1.</li>
+    0 and 1.</dd>
 
-  <li><b>isSpam</b>. A boolean. <code>true</code> if spam, <code>false</code> if not.</li>
+  <dt>isSpam</dt>
+  <dd>A boolean. <code>true</code> if
+    spam, <code>false</code> if not. Based on the probability cutoff
+    configured at the server.</dd>
 
-  <li><b>bestKeys</b>. An array of 2-element arrays, each of which
+  <dt>bestKeys</dt>
+  <dd>. An array of 2-element arrays, each of which
     having a first element of the key that was used to determine
-    spamicity, and the probability. Useful debugging tool.</li>
+    spamicity, and the probability. Useful debugging tool.</dd>
 
-</ul>
+</dl>
 
 <h3>/this-is-spam</h3>
 
 <p>Trains the activity as spam. Returns a training record, a single
   JSON object with the following attributes:</p>
 
-<ul>
-  <li><b>cat</b> The trained category; "spam" for this method.</li>
-  <li><b>object</b> The object that was trained.</li>
-  <li><b>date</b> The date of training.</li>
-  <li><b>elapsed</b> The elapsed training time, in milliseconds.</li>
-  <li><b>hash</b> An MD5 hash of the trained object.</li>
-</ul>
+<dl>
+  <dt>cat</dt>
+  <dd> The trained category; "spam" for this method.</dd>
+  <dt>object</dt>
+  <dd> The object that was trained.</dd>
+  <dt>date</dt>
+  <dd> The date of training.</dd>
+  <dt>elapsed</dt>
+  <dd> The elapsed training time, in milliseconds.</dd>
+  <dt>hash</dt>
+  <dd> An MD5 hash of the trained object.</dd>
+</dl>
 
-<p><b>Note</b>: After the initial training, it's more effective to
+<p><b>Note</dt>
+<dd>: After the initial training, it's more effective to
   train a Bayesian filter only when its current results are wrong. So,
   call <code>/is-this-spam</code> first.</p>
 
@@ -61,13 +72,18 @@ key and secret by <a href="/login">logging in</a>.</p>
 <p>Trains the activity as spam. Returns a training record, a single
   JSON object with the following attributes:</p>
 
-<ul>
-  <li><b>cat</b> The trained category; "ham" for this method.</li>
-  <li><b>object</b> The object that was trained. For reference.</li>
-  <li><b>date</b> The date of training.</li>
-  <li><b>elapsed</b> The elapsed training time, in milliseconds.</li>
-  <li><b>hash</b> An MD5 hash of the trained object.</li>
-</ul>
+<dl>
+  <dt>cat</dt>
+  <dd> The trained category; "ham" for this method.</dd>
+  <dt>object</dt>
+  <dd> The object that was trained. For reference.</dd>
+  <dt>date</dt>
+  <dd> The date of training.</dd>
+  <dt>elapsed</dt>
+  <dd> The elapsed training time, in milliseconds.</dd>
+  <dt>hash</dt>
+  <dd> An MD5 hash of the trained object.</dd>
+</dl>
 
 <p><b>Note</b>: After the initial training, it's more effective to
   train a Bayesian filter only when its current results are wrong. So,
@@ -76,8 +92,8 @@ key and secret by <a href="/login">logging in</a>.</p>
 <h3>/tokenize</h3>
 
 <p>Utility that shows how an activity will be tokenized. Possibly
-useful for debugging; also a nice idempotent method to test your OAuth
-keys with.</p>
+  useful for debugging; also a nice idempotent method to test your OAuth
+  keys with.</p>
 
 <p>Returns a JSON document with an array of strings.</p>
 
