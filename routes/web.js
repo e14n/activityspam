@@ -143,6 +143,14 @@ exports.apps = function(req, res, next) {
     });
 };
 
+exports.addAppForm = function(req, res, next) {
+    res.render('addapp', { title: 'Add an app' });
+};
+
+exports.removeAppForm = function(req, res, next) {
+    res.render('removeapp', { title: 'Delete an app' });
+};
+
 exports.addApp = function(req, res, next) {
 
     var props = {},
@@ -161,37 +169,23 @@ exports.addApp = function(req, res, next) {
 	props[field] = req.body[field];
     }
 
+    props.owner = req.user.email;
+
     App.create(props, function(err, app) {
 	if (err) {
 	    next(err);
 	    return;
 	}
-	res.json(app);
+        res.redirect('/apps', 303);
     });
 };
 
 exports.removeApp = function(req, res, next) {
-    var key;
-
-    if (!_(req.body).has('consumer_key')) {
-	next(new Error("No key"));
-        return;
-    }
-
-    key = req.body.consumer_key;
-
-    App.get(key, function(err, app) {
+    req.app.del(function(err) {
 	if (err) {
-	    next(err);
-	    return;
+	    return next(err);
 	}
-	app.del(function(err) {
-	    if (err) {
-		next(err);
-		return;
-	    }
-	    res.json({success: true});
-	});
+        return res.redirect('/apps', 303);
     });
 };
 
@@ -214,18 +208,10 @@ exports.updateApp = function(req, res, next) {
 	props[field] = req.body[field];
     }
 
-    App.get(props.consumer_key, function(err, app) {
-
+    req.app.update(props, function(err) {
 	if (err) {
-	    next(err);
-	    return;
+	    return next(err);
 	}
-	app.update(props, function(err) {
-	    if (err) {
-		next(err);
-		return;
-	    }
-	    res.json({success: true});
-	});
+        return res.redirect('/apps', 303);
     });
 };

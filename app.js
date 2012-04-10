@@ -96,6 +96,19 @@ var sessionUser = function(req, res, next) {
     }
 };
 
+app.param('consumer_key', function(req, res, next, key) {
+    req.app = null;
+    res.local('app', null);
+    App.get(key, function(err, app) {
+        if (err) {
+            return next(err);
+        }
+        req.app = app;
+        res.local('app', app);
+        return next();
+    });
+});
+
 var notLoggedIn = function(req, res, next) {
     if (req.user) {
         next(new Error("Must not be logged in."));
@@ -109,6 +122,14 @@ var loggedIn = function(req, res, next) {
         next(new Error("Must be logged in."));
     } else {
         next();
+    }
+};
+
+var ownApp = function(req, res, next) {
+    if (!req.app || !req.user || req.app.owner !== req.user.email) {
+        return next(new Error("Not your app."));
+    } else {
+        return next();
     }
 };
 
@@ -131,9 +152,15 @@ app.post('/register', webSite, notLoggedIn, web.register);
 app.get('/logout', webSite, loggedIn, web.logout);
 
 app.get('/apps', webSite, loggedIn, web.apps);
+
+app.get('/app/add', webSite, loggedIn, web.addAppForm);
 app.post('/app/add', webSite, loggedIn, web.addApp);
-app.post('/app/remove', webSite, loggedIn, web.removeApp);
-app.post('/app/edit', webSite, loggedIn, web.editApp);
+
+app.get('/app/:consumer_key/edit', webSite, loggedIn, ownApp, web.editAppForm);
+app.post('/app/:consumer_key/edit', webSite, loggedIn, ownApp, web.editApp);
+
+app.get('/app/:consumer_key/remove', webSite, loggedIn, ownApp, web.removeAppForm);
+app.post('/app/:consumer_key/remove', webSite, loggedIn, ownApp, web.removeApp);
 
 app.post('/is-this-spam', api.isThisSpam);
 app.post('/this-is-spam', api.thisIsSpam);

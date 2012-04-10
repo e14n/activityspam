@@ -6,28 +6,22 @@
 <p>Fill in the form to get an API key for a new app.</p>
 <% } %> 
 
+<p><a href="/app/add" class="btn">Add</a></p>
+
 <% _.each(apps, function(app) { %>
-<div class="app-block">
-  <h2><%= app.title %></h2>
+<div class="app-block" id="app-<%- app.consumer_key %>" data-key="<%- app.consumer_key %>">
+  <h2><%- app.title %></h2>
   <dl>
     <dt>Description</dt>
-    <dd><%= app.description %></dd>
+    <dd><%- app.description %></dd>
     <dt>Domain</dt>
-    <dd><%= app.domain %></dd>
+    <dd><%- app.domain %></dd>
     <dt>Consumer key</dt>
-    <dd><%= app.consumer_key %></dd>
+    <dd><%- app.consumer_key %></dd>
     <dt>Secret (shh!)</dt>
-    <dd><%= app.secret %></dd>
+    <dd><%- app.secret %></dd>
   </dl>
+  <p><a href="/app/<%- app.consumer_key %>/edit" class="btn">Edit</a></p>
+  <p><a href="/app/<%- app.consumer_key %>/remove" class="btn">Remove</a></p>
 </div>
 <% }); %>
-
-
-<div class="app-add">
-  <form id="app-add-form" class="well form-inline">
-    <input type="text" class="input-medium" placeholder="title">
-    <input type="text" class="input-medium" placeholder="description">
-    <input type="text" class="input-medium" placeholder="host">
-    <button type="submit" class="btn">Add</button>
-  </form>
-</div>
