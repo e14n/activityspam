@@ -29,9 +29,10 @@ App.schema = {
                      'description',
                      'host',
                      'secret',
+                     'owner',
                      'created',
                      'updated'],
-	    indices: ['title']}
+	    indices: ['title', 'owner']}
 };
 
 App.keyPair = function(callback) {
@@ -108,6 +109,7 @@ App.prototype.update = function(newApp, callback) {
     newApp.created      = this.created;
     newApp.consumer_key = this.consumer_key;
     newApp.secret       = this.secret;
+    newApp.owner        = this.owner;
 
     this.defaultUpdate(newApp, callback);
 };

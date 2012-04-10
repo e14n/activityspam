@@ -28,8 +28,7 @@ User.schema = {user: {pkey: 'email',
                       fields: ['email',
                                'hash',
                                'created',
-                               'updated']},
-               applist: {pkey: 'email'}};
+                               'updated']}};
 
 User.prototype.checkPassword = function(cleartext, callback) {
     bcrypt.compare(cleartext, this.hash, callback);
@@ -83,17 +82,7 @@ User.create = function(properties, callback) {
 };
 
 User.prototype.getApps = function(callback) {
-    User.bank().read('applist', this.email, function(err, apps) {
-        if (err) {
-            if (err instanceof NoSuchThingError) {
-                callback(null, []);
-            } else {
-                callback(err, null);
-            }
-        } else {
-            App.readAll(apps, callback);
-        }
-    });
+    App.search({owner: this.email}, callback);
 };
 
 exports.User = User;
