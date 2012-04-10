@@ -2,6 +2,9 @@
 
 <% if (apps.length > 0) { %> 
 <p>These are the apps you're responsible for.</p>
+<% } else { %> 
+<p>Fill in the form to get an API key for a new app.</p>
+<% } > 
 
 <% _.each(apps, function(app) { %>
 <div class="app-block">
@@ -19,9 +22,6 @@
 </div>
 <% }); %>
 
-<% } else { %> 
-<p>Fill in the form to get an API key for a new app.</p>
-<% } > 
 
 <div class="app-add">
   <form id="app-add-form" class="well form-inline">
