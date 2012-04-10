@@ -1,6 +1,6 @@
 <h1>Apps</h1>
 
-<% if (apps.length > 0) { %> 
+<% if (apps.length != 0) { %> 
 <p>These are the apps you're responsible for.</p>
 <% } else { %> 
 <p>Fill in the form to get an API key for a new app.</p>
