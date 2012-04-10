@@ -1,14 +1,56 @@
-<h1><%- site %></h1>
+<div class="hero-unit">
 
-<p>This is <%- site %>, a service that checks <b>social network</b> data for spam.</p>
+  <h1>Hate spam? Us too.</h1>
 
-<p>Social network administrators can post social network events
-  in <a href="http://activitystrea.ms/">Activity Streams</a> format to
-  the <a href="/api">RESTful API</a> to determine the spamicity of postings.</p>
+  <p>This is <%- sitename %>, the service that <b>cleans up spam</b>
+    in social networks. With our simple, high-performance API, site owners can
+    <b>stop worrying</b> about spammers and focus on
+    making <b>great social networks</b> for their users.</p>
 
-<p>Because multiple social networks use the service, spam is
-  identified quickly and prevented from spreading.</p>
+  <p><a href="/register" class="btn btn-primary btn-large">Sign up &raquo;</a></p>
 
-<p>Best of all, the software is <a href="http://en.wikipedia.org/wiki/Open-source_software">Open Source</a> software.
-  Source is available at <a href="https://github.com/evanp/activityspam">https://github.com/evanp/activityspam</a>.</p>
+</div>
+
+<!-- Example row of columns -->
+
+<div class="row">
+
+  <div class="span4">
+
+    <h2>REST easy</h2>
+
+    <p>Tired of home-built solutions? Sick of email- or blog-spam
+      services that can't handle your social flow? Our API is <b>built
+        for social</b> and easy to integrate into any social software.</p>
+
+    <p><a class="btn" href="/api">Learn more &raquo;</a></p>
+
+  </div>
+
+  <div class="span4">
+
+    <h2>In it together</h2>
+
+    <p><%- site %> uses information from <b>tens of thousands of
+        social networks</b> across the Web to filter social
+        data. That's the power of collective intelligence, working
+        for everybody's benefit (except the spammers).</p>
+
+  </div>
+
+  <div class="span4">
+
+    <h2>Open Source</h2>
+
+    <p>Security through obscurity is B.S. We&apos;re not afraid
+      to show the world our code. Our free and open source software is
+      available for review; we want to make it better. And if you
+      need a private solution, it&apos;free for you to try.</p>
+
+    <p><a class="btn" href="https://github.com/evanp/activityspam">Get the source &raquo;</a></p>
+
+  </div>
+
+</div>
+
 
