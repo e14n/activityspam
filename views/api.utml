@@ -21,7 +21,7 @@ key and secret by <a href="/login">logging in</a>.</p>
 
 <p>Ask if the activity is spam. The activity data is put through a 
   <a href="http://en.wikipedia.org/wiki/Bayesian_spam_filtering">Bayesian
-    spam filter</a> to determine its spamicity (thanks, Paul Graham!).</p>
+    spam filter</a> to determine its spamicity (<a href="http://www.paulgraham.com/spam.html">thanks, Paul Graham</a>!).</p>
 
 <p>The result is a JSON document with a single object with the following attributes:</p>
 
