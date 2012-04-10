@@ -140,6 +140,10 @@ app.post('/this-is-spam', api.thisIsSpam);
 app.post('/this-is-ham', api.thisIsHam);
 app.post('/tokenize', api.testTokenize);
 
+app.error(function(err, req, res) {
+    res.render('error', {err: err});
+});
+
 // Set the tokenizer options
 
 var i, opt, opts = ["useDigrams", "usePrefixes", "useBare", "useArrayLength"];
