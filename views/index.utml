@@ -1,4 +1,14 @@
 <h1><%- site %></h1>
 
-<p>This is <%- site %>. It's a service that checks <a href="http://activitystrea.ms/">Activity Streams</a> objects for spam.</p>
+<p>This is <%- site %>, a service that checks <b>social network</b> data for spam.</p>
+
+<p>Social network administrators can post social network events
+  in <a href="http://activitystrea.ms/">Activity Streams</a> format to
+  the <a href="/api">RESTful API</a> to determine the spamicity of postings.</p>
+
+<p>Because multiple social networks use the service, spam is
+  identified quickly and prevented from spreading.</p>
+
+<p>Best of all, the software is <a href="http://en.wikipedia.org/wiki/Open-source_software">Open Source</a> software.
+  Source is available at <a href="https://github.com/evanp/activityspam">https://github.com/evanp/activityspam</a>.</p>
 
