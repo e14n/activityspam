@@ -20,7 +20,7 @@ var databank = require('databank'),
     _ = require('underscore'),
     DatabankObject = databank.DatabankObject,
     NoSuchThingError = databank.NoSuchThingError,
-    App = require('./app');
+    App = require('./app').App;
 
 var User = DatabankObject.subClass('user');
 
