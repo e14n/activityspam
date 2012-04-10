@@ -2,7 +2,7 @@
 
   <h1>Hate spam? Us too.</h1>
 
-  <p>This is <%- sitename %>, the service that <b>cleans up spam</b>
+  <p>This is <%- site %>, the service that <b>cleans up spam</b>
     in social networks. With our simple, high-performance API, site owners can
     <b>stop worrying</b> about spammers and focus on
     making <b>great social networks</b> for their users.</p>
