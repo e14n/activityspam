@@ -1,0 +1,9 @@
+<h1>Delete an app</h1>
+
+<p>Are you sure you want to delete this app? Any future requests using this key will be rejected.</p>
+
+<form action="/app/<%- app.consumer_key %>/remove" method="post">
+  <a href="/apps" class="btn">Back</a>
+  <input type="submit" class="btn btn-danger">Delete</input>
+</form>
+

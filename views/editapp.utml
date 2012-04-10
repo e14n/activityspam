@@ -1,0 +1,27 @@
+<h1>Edit app</h1>
+
+<form id="app-add-form" method="post" action="/app/<%- app.consumer_key %>/edit" class="well form-horizontal">
+  <fieldset>
+    <input type="hidden" name="consumer_key" value="<%- app.consumer_key %>/>" />
+    <div class="control-group">
+      <label class="control-label" for="title">Title</label>
+      <div class="controls">
+        <input type="text" class="input-medium" name="title" id="title" value="<%- app.title %>"/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="description">Description</label>
+      <div class="controls">
+        <textarea class="input-medium" id="description" name="description"><%- app.description %></textarea>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="host">Host</label>
+      <div class="controls">
+        <input type="text" class="input-medium" name="host" id="host" value="<%- app.host %>" />
+      </div>
+    </div>
+    <button type="submit" class="btn">Save</button>
+  </fieldset>
+</form>
+
