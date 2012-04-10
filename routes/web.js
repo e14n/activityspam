@@ -193,7 +193,7 @@ exports.removeApp = function(req, res, next) {
     });
 };
 
-exports.updateApp = function(req, res, next) {
+exports.editApp = function(req, res, next) {
 
     var props = {},
 	fields = ['title', 'host', 'description', 'consumer_key'],
