@@ -4,6 +4,6 @@
 
 <form action="/app/<%- app.consumer_key %>/remove" method="post">
   <a href="/apps" class="btn">Back</a>
-  <input type="submit" class="btn btn-danger">Delete</input>
+  <input type="submit" class="btn btn-danger" value="Delete" />
 </form>
 
