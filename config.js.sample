@@ -3,6 +3,3 @@ exports.params = {};
 exports.username = "somename";
 exports.password = "somepassword";
 exports.sessionSecret = "use something better";
-exports.key = "/path/to/server.key";
-exports.cert = "/path/to/server.crt";
-

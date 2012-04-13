@@ -30,8 +30,7 @@ var connect = require('connect'),
     api = require('./routes/api'),
     User = require('./models/user').User,
     App = require('./models/app').App,
-    fs = require('fs'),
-    params, server, db, serverOptions;
+    params, server, db;
 
 params = config.params;
 
@@ -45,15 +44,7 @@ _.extend(params.schema, App.schema);
 
 db = Databank.get(config.driver, params);
 
-serverOptions = {};
-
-if (_(config).has('key')) {
-    serverOptions.key = fs.readFileSync(config.key);
-    serverOptions.cert = fs.readFileSync(config.cert);
-}
-
 var app = module.exports = express.createServer(
-    serverOptions,
     auth([auth.Oauth({oauth_provider: new Provider(),
                       authenticate_provider: null,
                       authorize_provider: null,
