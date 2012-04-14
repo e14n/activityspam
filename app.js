@@ -190,10 +190,12 @@ db.connect({}, function(err) {
         SpamFilter.db = db;
         DatabankObject.bank = db;
 
-        app.on('listening', function() {
-            // Drop privs if needed
-            process.setuid(config.serverUser);
-        });
+        // Drop privs if needed
+        if (_(config).has('serverUser')) {
+            app.on('listening', function() {
+                process.setuid(config.serverUser);
+            });
+        }
 
         app.listen(config.port || process.env.PORT || 8001);
     }
