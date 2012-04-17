@@ -31,7 +31,7 @@ var connect = require('connect'),
     User = require('./models/user').User,
     App = require('./models/app').App,
     fs = require('fs'),
-    params, server, db, serverOptions, app, bounce;
+    params, server, db, app, bounce, useHTTPS;
 
 // Setup database
 
@@ -50,7 +50,9 @@ db = Databank.get(config.driver, params);
 // Create app
 // XXX: why won't this run in the configure section?
 
-if (_(config).has('key')) {
+useHTTPS = _(config).has('key');
+
+if (useHTTPS) {
 
     app = express.createServer({key: fs.readFileSync(config.key),
                                 cert: fs.readFileSync(config.cert)});
@@ -73,6 +75,7 @@ app.configure(function() {
     app.use(express.cookieParser());
     app.use(express.session({ secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure" }));
     app.use(auth([auth.Oauth({oauth_provider: new Provider(),
+                              oauth_protocol: (useHTTPS) ? 'https' : 'http',
                               authenticate_provider: null,
                               authorize_provider: null,
                               authorization_finished_provider: null
@@ -218,7 +221,7 @@ db.connect({}, function(err) {
             });
         }
 
-        if (_(config).has('key')) {
+        if (useHTTPS) {
             app.listen(config.httpsPort || 443);
             bounce.listen(config.port || 80);
         } else {
