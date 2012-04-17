@@ -21,16 +21,14 @@ var Tokenizer = require('../lib/tokenizer').Tokenizer,
 
 exports.thisIsSpam = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
-	if (error) {
-	    return;
-	}
+        if (error) {
+            return;
+        }
         SpamFilter.train('spam', req.body, function(err, trainrec) {
             if (err) {
-                res.writeHead(500, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify({error: err.message}));
+                res.json({error: err.message}, 500);
             } else {
-                res.writeHead(200, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify(trainrec));
+                res.json(trainrec);
             }
         });
     });
@@ -38,16 +36,14 @@ exports.thisIsSpam = function(req, res, next) {
 
 exports.thisIsHam = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
-	if (error) {
-	    return;
-	}
+        if (error) {
+            return;
+        }
         SpamFilter.train('ham', req.body, function(err, trainrec) {
             if (err) {
-                res.writeHead(500, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify({error: err.message}));
+                res.json({error: err.message}, 500);
             } else {
-                res.writeHead(200, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify(trainrec));
+                res.json(trainrec);
             }
         });
     });
@@ -69,19 +65,17 @@ exports.isThisSpam = function(req, res, next) {
 
     req.authenticate(['oauth'], function(error, authenticated) { 
 
-	if (error) {
-	    return;
-	}
+        if (error) {
+            return;
+        }
 
         var tokens = uniq(Tokenizer.tokenize(req.body));
 
         SpamFilter.test(tokens, function(err, decision) {
             if (err) {
-                res.writeHead(500, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify(err.message));
-            } else {
-                res.writeHead(200, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify(decision));
+                res.json({error: err.message}, 500);
+            } else { 
+                res.json(decision);
             }
         });
     });
@@ -90,14 +84,13 @@ exports.isThisSpam = function(req, res, next) {
 exports.testTokenize = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
 
-	if (error) {
-	    return;
-	}
+        if (error) {
+            return;
+        }
 
         if (authenticated) {
             var tokens = Tokenizer.tokenize(req.body);
-            res.writeHead(200, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify(tokens));
+            res.json(tokens);
         }
     });
 };
