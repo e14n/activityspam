@@ -199,6 +199,10 @@ db.connect({}, function(err) {
             });
         }
 
-        app.listen(config.port || process.env.PORT || 8001);
+        if (_(config).has('httpsPort')) {
+            app.listen(config.httpsPort || 443);
+        } else {
+            app.listen(config.port || 80);
+        }
     }
 });
