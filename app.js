@@ -78,7 +78,7 @@ app.configure('production', function() {
     app.use(express.errorHandler());
 });
 
-// Routes
+// Middleware
 
 var sessionUser = function(req, res, next) {
     res.local('user', null);
@@ -139,6 +139,8 @@ var webSite = [
     express.methodOverride(),
     sessionUser
 ];
+
+// Routes
 
 app.get('/', webSite, web.index);
 app.get('/api', webSite, web.api);
