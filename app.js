@@ -31,7 +31,9 @@ var connect = require('connect'),
     User = require('./models/user').User,
     App = require('./models/app').App,
     fs = require('fs'),
-    params, server, db, serverOptions;
+    params, server, db, serverOptions, app, bounce, authMW;
+
+// Setup database
 
 params = config.params;
 
@@ -45,21 +47,30 @@ _.extend(params.schema, App.schema);
 
 db = Databank.get(config.driver, params);
 
-serverOptions = {};
+// Create app
+// XXX: why won't this run in the configure section?
+
+authMW = auth([auth.Oauth({oauth_provider: new Provider(),
+                           authenticate_provider: null,
+                           authorize_provider: null,
+                           authorization_finished_provider: null
+                          })]);
+
 
 if (_(config).has('key')) {
-    serverOptions.key = fs.readFileSync(config.key);
-    serverOptions.cert = fs.readFileSync(config.cert);
-}
 
-var app = module.exports = express.createServer(
-    serverOptions,
-    auth([auth.Oauth({oauth_provider: new Provider(),
-                      authenticate_provider: null,
-                      authorize_provider: null,
-                      authorization_finished_provider: null
-                     })])
-);
+    app = express.createServer({key: fs.readFileSync(config.key),
+                                cert: fs.readFileSync(config.cert)},
+                               authMW);
+
+    bounce = express.createServer(function(req, res, next) {
+        var host = req.header('Host');
+        res.redirect('https://'+host+req.url, 301);
+    });
+
+} else {
+    app = express.createServer(authMW);
+}
 
 // Configuration
 
@@ -72,8 +83,8 @@ app.configure(function() {
     app.use(express.methodOverride());
     app.use(express.bodyParser());
     app.use(function(req, res, next) { 
-	res.local('site', (config.site) ? config.site : "ActivitySpam");
-	next();
+        res.local('site', (config.site) ? config.site : "ActivitySpam");
+        next();
     });
     app.use(app.router);
     app.use(express.static(__dirname + '/public'));
@@ -202,14 +213,17 @@ db.connect({}, function(err) {
         DatabankObject.bank = db;
 
         // Drop privs if needed
+        // XXX: ...and for the bouncer?
+
         if (_(config).has('serverUser')) {
             app.on('listening', function() {
                 process.setuid(config.serverUser);
             });
         }
 
-        if (_(config).has('httpsPort')) {
+        if (_(config).has('key')) {
             app.listen(config.httpsPort || 443);
+            bounce.listen(config.port || 80);
         } else {
             app.listen(config.port || 80);
         }
