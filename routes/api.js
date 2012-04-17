@@ -22,8 +22,14 @@ var Tokenizer = require('../lib/tokenizer').Tokenizer,
 exports.thisIsSpam = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
         if (error) {
+            res.json({error: error.message}, 500);
             return;
         }
+
+        if (!authenticated) {
+            return;
+        }
+
         SpamFilter.train('spam', req.body, function(err, trainrec) {
             if (err) {
                 res.json({error: err.message}, 500);
@@ -37,8 +43,14 @@ exports.thisIsSpam = function(req, res, next) {
 exports.thisIsHam = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
         if (error) {
+            res.json({error: error.message}, 500);
             return;
         }
+
+        if (!authenticated) {
+            return;
+        }
+
         SpamFilter.train('ham', req.body, function(err, trainrec) {
             if (err) {
                 res.json({error: err.message}, 500);
@@ -66,6 +78,11 @@ exports.isThisSpam = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
 
         if (error) {
+            res.json({error: error.message}, 500);
+            return;
+        }
+
+        if (!authenticated) {
             return;
         }
 
@@ -85,12 +102,15 @@ exports.testTokenize = function(req, res, next) {
     req.authenticate(['oauth'], function(error, authenticated) { 
 
         if (error) {
+            res.json({error: error.message}, 500);
             return;
         }
 
-        if (authenticated) {
-            var tokens = Tokenizer.tokenize(req.body);
-            res.json(tokens);
+        if (!authenticated) {
+            return;
         }
+
+        var tokens = Tokenizer.tokenize(req.body);
+        res.json(tokens);
     });
 };
