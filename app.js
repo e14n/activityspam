@@ -31,7 +31,7 @@ var connect = require('connect'),
     User = require('./models/user').User,
     App = require('./models/app').App,
     fs = require('fs'),
-    params, server, db, serverOptions, app, bounce, authMW;
+    params, server, db, serverOptions, app, bounce;
 
 // Setup database
 
@@ -50,18 +50,10 @@ db = Databank.get(config.driver, params);
 // Create app
 // XXX: why won't this run in the configure section?
 
-authMW = auth([auth.Oauth({oauth_provider: new Provider(),
-                           authenticate_provider: null,
-                           authorize_provider: null,
-                           authorization_finished_provider: null
-                          })]);
-
-
 if (_(config).has('key')) {
 
     app = express.createServer({key: fs.readFileSync(config.key),
-                                cert: fs.readFileSync(config.cert)},
-                               authMW);
+                                cert: fs.readFileSync(config.cert)});
 
     bounce = express.createServer(function(req, res, next) {
         var host = req.header('Host');
@@ -69,7 +61,7 @@ if (_(config).has('key')) {
     });
 
 } else {
-    app = express.createServer(authMW);
+    app = express.createServer();
 }
 
 // Configuration
@@ -80,6 +72,11 @@ app.configure(function() {
     app.use(express.logger());
     app.use(express.cookieParser());
     app.use(express.session({ secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure" }));
+    app.use(auth([auth.Oauth({oauth_provider: new Provider(),
+                              authenticate_provider: null,
+                              authorize_provider: null,
+                              authorization_finished_provider: null
+                             })]));
     app.use(express.methodOverride());
     app.use(express.bodyParser());
     app.use(function(req, res, next) { 
