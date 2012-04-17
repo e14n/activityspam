@@ -11,3 +11,5 @@ exports.useArrayLength = true;
 exports.serverUser = "spaminfo"; // must exist!
 exports.port = 80;
 exports.httpsPort = 443;
+exports.key = "/path/to/server.key";
+exports.cert = "/path/to/server.crt";
