@@ -84,6 +84,7 @@ app.configure(function() {
     app.use(express.bodyParser());
     app.use(function(req, res, next) { 
         res.local('site', (config.site) ? config.site : "ActivitySpam");
+        res.local('owner', (config.owner) ? config.owner : "Anonymous");
         next();
     });
     app.use(app.router);
