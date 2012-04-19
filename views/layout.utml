@@ -63,15 +63,13 @@
       <hr>
 
       <footer>
+	<p>
 	<% if (ownerurl) { %>
-	<p><%- site %> is a service of <a href="<%- ownerURL %>"><%- owner %></a>.</p>
+	<%- site %> is a service of <a href="<%- ownerURL %>"><%- owner %></a>.
 	<% } else { %>
-	<p><%- site %> is a service of <%- owner %>.</p>
+	<%- site %> is a service of <%- owner %>.
 	<% } %>
-	<ul style="display: block">
-	  <li><a href="/tos">Terms of Service</a></li>
-	  <li><a href="/privacy">Privacy Policy</a></li>
-	</ul>
+	| <a href="/tos">Terms of Service</a> | <a href="/privacy">Privacy Policy</a></p>
 	<p><a href="https://github.com/evanp/activityspam">ActivitySpam</a> software available under the Apache Public License 2.0.</p>
       </footer>
 
