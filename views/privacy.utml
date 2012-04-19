@@ -21,7 +21,7 @@
   have questions about deleting or correcting your personal data
   please <a href="/contact">contact us</a>.</p>
 
-<p><%- owner %> (&quot;<strong>Owner</strong>&quot;) operates <%- site >
+<p><%- owner %> (&quot;<strong>Owner</strong>&quot;) operates <%- site %>
   (&quot;<strong>Service</strong>&quot;). It is Owner’s policy to respect your
   privacy regarding any information we may collect while operating our
   websites.</p>
