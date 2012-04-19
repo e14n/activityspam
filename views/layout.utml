@@ -63,7 +63,16 @@
       <hr>
 
       <footer>
-	&copy; 2012 <a href="http://status.net/">StatusNet Inc.</a>.
+	<% if (ownerURL) { %>
+	<p><%- site %> is a service of <a href="<%- ownerURL %>"><%- owner %></a>.</p>
+	<% } else { %>
+	<p><%- site %> is a service of <%- owner %>.</p>
+	<% } %>
+	<ul style="display: block">
+	  <li><a href="/tos">Terms of Service</a></li>
+	  <li><a href="/privacy">Privacy Policy</a></li>
+	</ul>
+	<p><a href="https://github.com/evanp/activityspam">ActivitySpam</a> software available under the Apache Public License 2.0.</p>
       </footer>
 
     </div> <!-- /container -->
