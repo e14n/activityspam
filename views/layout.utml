@@ -65,7 +65,7 @@
       <footer>
 	<p>
 	<% if (ownerurl) { %>
-	<%- site %> is a service of <a href="<%- ownerURL %>"><%- owner %></a>.
+	<%- site %> is a service of <a href="<%- ownerurl %>"><%- owner %></a>.
 	<% } else { %>
 	<%- site %> is a service of <%- owner %>.
 	<% } %>
