@@ -21,9 +21,15 @@
       <p class="help-block">A password; make it good!</p>
     </div>
     <div class="control-group">
-      <label class="control-label" for="password">Confirm</label>
+      <label class="control-label" for="confirm">Confirm</label>
       <div class="controls">
         <input type="password" class="input-medium" id="confirm" name="confirm" />
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="accept">I confirm that I have read and accepted the <a href="/tos">terms of service</a> and <a href="/privacy">privacy policy</a> for <%- site %>.</label>
+      <div class="controls">
+        <input type="checkbox" class="input-medium" name="accept" id="accept" />
       </div>
     </div>
     <div class="form-actions">

@@ -80,7 +80,7 @@ exports.login = function(req, res, next) {
 };
 
 exports.register = function(req, res, next) {
-    var user, email, password,
+    var user, email, password, confirm, accept,
         showError = function(message) {
             res.render('register', { title: 'Register',
                                      error: message });
@@ -109,6 +109,13 @@ exports.register = function(req, res, next) {
 
     if (confirm !== password) {
         showError("Passwords don't match.");
+        return;
+    }
+
+    accept = req.body.accept;
+
+    if (confirm !== password) {
+        showError("You must accept the terms of service.");
         return;
     }
 
