@@ -60,6 +60,12 @@
 
       <%= body %>
 
+      <hr>
+
+      <footer>
+	&copy; 2012 <a href="http://status.net/">StatusNet Inc.</a>.
+      </footer>
+
     </div> <!-- /container -->
 
     <!-- Le javascript
