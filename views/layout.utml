@@ -63,7 +63,7 @@
       <hr>
 
       <footer>
-	<% if (ownerURL) { %>
+	<% if (ownerurl) { %>
 	<p><%- site %> is a service of <a href="<%- ownerURL %>"><%- owner %></a>.</p>
 	<% } else { %>
 	<p><%- site %> is a service of <%- owner %>.</p>
