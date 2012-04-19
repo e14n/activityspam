@@ -85,7 +85,7 @@ app.configure(function() {
     app.use(function(req, res, next) { 
         res.local('site', (config.site) ? config.site : "ActivitySpam");
         res.local('owner', (config.owner) ? config.owner : "Anonymous");
-        res.local('ownerurl', (config.ownerURL) ? config.ownerURL : null);
+        res.local('ownerurl', (config.ownerURL) ? config.ownerURL : false);
         next();
     });
     app.use(app.router);
