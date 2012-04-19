@@ -1,6 +1,6 @@
 <div class="hero-unit">
 
-  <h1>Hate spam? Us too.</h1>
+  <h1>Hate spam? Yeah, us too.</h1>
 
   <p>This is <%- site %>, the service that <b>cleans up spam</b>
     in social networks. With our simple, high-performance API, site owners can
@@ -17,7 +17,7 @@
 
   <div class="span4">
 
-    <h2>REST easy</h2>
+    <h2>Built for social</h2>
 
     <p>Tired of home-built solutions? Sick of email- or blog-spam
       services that can't handle your social flow? Our API is <b>built
@@ -29,7 +29,7 @@
 
   <div class="span4">
 
-    <h2>In it together</h2>
+    <h2>Collective intelligence</h2>
 
     <p><%- site %> uses information from <b>tens of thousands of
         social networks</b> across the Web to filter social
