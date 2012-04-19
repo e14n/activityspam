@@ -26,6 +26,10 @@ exports.index = function(req, res, next) {
     res.render('index', { title: 'Home' });
 };
 
+exports.index = function(req, res, next) {
+    res.render('tos', { title: 'Terms of Service' });
+};
+
 exports.api = function(req, res, next) {
     res.render('api', { title: 'API' });
 };

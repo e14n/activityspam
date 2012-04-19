@@ -1,0 +1,218 @@
+<h3>Summary</h3>
+
+<p>We, <%- owner %>, provide <%- site %>, a social-spam filtering
+  service (“Service”). During our beta period anyone can use it for
+  free, but at some point we&apos;ll ask commercial social networks
+  that make a lot of requests to pay a reasonable monthly
+  subscription.</p>
+
+<p>We intend the service to help social network owners keep their
+  networks free of spam. We would be delighted if you use the service
+  in ways we don&apos;t expect. However, you may not use the service to
+  help send spam or to prevent spam detection by our other users.</p>
+
+<p>We don&apos;t promise that the service will detect all spam, nor
+  that it will correctly classify non-spam. We can&apos;t guarantee
+  up-time for non-paying users.</p>
+
+<h3>Terms of Service</h3>
+
+<p>The following terms and conditions govern all use of the <%- site
+  %> website and all content, services and products available at or
+  through the website. The Service is owned and operated by <%- owner
+  %> (“Owner”). The Service is offered subject to your acceptance
+  without modification of all of the terms and conditions contained
+  herein and all other operating rules, policies (including, without
+  limitation, <a href="/privacy/">Owner’s Privacy Policy</a>) and
+  procedures that may be published from time to time on this Site by
+  Owner (collectively, the “Agreement”).</p>
+
+<p>Please read this Agreement carefully before accessing or using the
+  Service. By accessing or using any part of the web site, you agree
+  to become bound by the terms and conditions of this agreement. If
+  you do not agree to all the terms and conditions of this agreement,
+  then you may not access the Service or use any services. If these
+  terms and conditions are considered an offer by Owner, acceptance is
+  expressly limited to these terms. The Service is available only to
+  individuals who are at least 13 years old.</p>
+
+<ol>
+
+  <li><strong>Your Account.</strong> If you
+    create an account on the Service, you are responsible for maintaining
+    the security of your account, and you are fully responsible
+    for all activities that occur under the account. You must immediately notify
+    Owner of any unauthorized uses of Your account or
+    any other breaches of security. Owner will not be liable for
+    any acts or omissions by You, including any damages of any kind
+    incurred as a result of such acts or omissions.</li>
+
+  <li><strong>Responsibility of Users.</strong> By using the Service,
+    you represent and warrant that:
+
+    <ul>
+
+      <li>Your use is not intended to help distribute spam;</li>
+
+      <li>Your use is not intended to provide false or misleading data
+      to the spam classifier;</li>
+
+      <li>Your use is not intended to impede, inhibit or discourage other
+      users of the Service.</li>
+
+    </ul>
+
+    <p>By submitting data to Owner for classification or training, you
+      grant Owner a non-exclusive license to store and adapt the data
+      solely for the purpose of classifying spam. If you delete your
+      account, Owner will continue to use training data for further
+      classification.</p>
+
+    <p>Without limiting any of those representations or warranties,
+      Owner has the right (though not the obligation) to, in Owner’s
+      sole discretion (i) refuse or remove any data that, in Owner’s
+      reasonable opinion, violates any Owner policy or is in any way
+      harmful or objectionable, or (ii) terminate or deny access to and
+      use of the Service to any individual or entity for any reason, in
+      Owner’s sole discretion. Owner will have no obligation to provide
+      a refund of any amounts previously paid.</p></li>
+
+  <li><strong>Payment and Renewal.</strong>
+
+    <ul>
+
+      <li><strong>General Terms. </strong><br />
+
+	Optional paid services are or will be available on the Service
+	(any such services, an &#8220;Upgrade&#8221;). By selecting an
+	Upgrade you agree to pay Owner the monthly or annual
+	subscription fees indicated for that service. Payments will be
+	charged on a pre-pay basis on the day you sign up for an
+	Upgrade and will cover the use of that service for a monthly
+	or annual subscription period as indicated. Upgrade fees are
+	not refundable.</li>
+
+      <li><strong>Automatic Renewal. </strong><br />
+
+	Unless you notify Owner before the end of the applicable
+	subscription period that you want to cancel an Upgrade, your
+	Upgrade subscription will automatically renew and you
+	authorize us to collect the then-applicable annual or monthly
+	subscription fee for such Upgrade (as well as any taxes) using
+	any credit card or other payment mechanism we have on record
+	for you. Upgrades can be canceled at any time in the Upgrades
+	section of your site&#8217;s dashboard.</li>
+
+    </ul>
+
+  </li>
+
+  <li><strong>Intellectual Property.</strong> This Agreement does not
+    transfer from Owner to you any Owner or third party intellectual
+    property, and all right, title and interest in and to such property
+    will remain (as between the parties) solely with Owner. <%- site %>,
+    the <%- site %> logo, and all other trademarks, service marks,
+    graphics and logos used in connection with <%- site %>, or the
+    Service are trademarks or registered trademarks of Owner or Owner’s
+    licensors. Other trademarks, service marks, graphics and logos used
+    in connection with the Service may be the trademarks of other third
+    parties. Your use of the Service grants you no right or license to
+    reproduce or otherwise use any Owner or third-party trademarks.</li>
+
+  <li><strong>Changes. </strong>Owner reserves the right, at its sole
+    discretion, to modify or replace any part of this Agreement. It is
+    your responsibility to check this Agreement periodically for
+    changes. Your continued use of or access to the Service following
+    the posting of any changes to this Agreement constitutes acceptance
+    of those changes. Owner may also, in the future, offer new services
+    and/or features through the Service (including, the release of new
+    tools and resources). Such new features and/or services shall be
+    subject to the terms and conditions of this Agreement.</li>
+
+  <li><strong>Termination. </strong>Owner may terminate your access to
+    all or any part of the Service at any time, with or without cause,
+    with or without notice, effective immediately. If you wish to
+    terminate this Agreement or your <%- site %> account (if you have
+    one), you may simply discontinue using the Service. All provisions
+    of this Agreement which by their nature should survive termination
+    shall survive termination, including, without limitation, ownership
+    provisions, warranty disclaimers, indemnity and limitations of
+    liability.</li>
+
+  <li><strong>Disclaimer of Warranties.</strong> The Service is
+    provided &#8220;as is&#8221;. Owner and its suppliers and licensors
+    hereby disclaim all warranties of any kind, express or implied,
+    including, without limitation, the warranties of merchantability,
+    fitness for a particular purpose and non-infringement. Neither Owner
+    nor its suppliers and licensors, makes any warranty that the Service
+    will be error free or that access thereto will be continuous or
+    uninterrupted. You understand that you download from, or otherwise
+    obtain content or services through, the Service at your own
+    discretion and risk.</li>
+
+  <li class="important"><strong>Limitation of Liability.</strong> In
+    no event will Owner, or its suppliers or licensors, be liable with
+    respect to any subject matter of this agreement under any contract,
+    negligence, strict liability or other legal or equitable theory for:
+    (i) any special, incidental or consequential damages; (ii) the cost
+    of procurement for substitute products or services; (iii) for
+    interruption of use or loss or corruption of data; or (iv) for any
+    amounts that exceed the fees paid by you to Owner under this
+    agreement during the twelve (12) month period prior to the cause of
+    action. Owner shall have no liability for any failure or delay due
+    to matters beyond their reasonable control. The foregoing shall not
+    apply to the extent prohibited by applicable law.</li>
+
+  <li><strong>General Representation and Warranty.</strong> You
+    represent and warrant that (i) your use of the Service will be in
+    strict accordance with the Owner Privacy Policy, with this Agreement
+    and with all applicable laws and regulations (including without
+    limitation any local laws or regulations in your country, state,
+    city, or other governmental area, regarding online conduct and
+    acceptable content, and including all applicable laws regarding the
+    transmission of technical data exported from the United States or
+    the country in which you reside) and (ii) your use of the Service
+    will not infringe or misappropriate the intellectual property rights
+    of any third party.</li>
+
+  <li><strong>Indemnification.</strong> You agree to indemnify and
+    hold harmless Owner, its contractors, and its licensors, and their
+    respective directors, officers, employees and agents from and
+    against any and all claims and expenses, including attorneys’ fees,
+    arising out of your use of the Service, including but not limited to
+    your violation of this Agreement.</li>
+
+  <li><strong>Miscellaneous.</strong> This Agreement constitutes the
+    entire agreement between Owner and you concerning the subject
+    matter hereof, and they may only be modified by a written
+    amendment signed by an authorized executive of Owner, or by the
+    posting by Owner of a revised version. Except to the extent
+    applicable law, if any, provides otherwise, this Agreement, any
+    access to or use of the Service will be governed by the laws of
+    the province of Quebec, Canada, and the proper venue for any
+    disputes arising out of or relating to any of the same will be the
+    courts located in Montreal, Quebec, Canada. The prevailing
+    party in any action or proceeding to enforce this Agreement shall
+    be entitled to costs and attorneys’ fees. If any part of this
+    Agreement is held invalid or unenforceable, that part will be
+    construed to reflect the parties’ original intent, and the
+    remaining portions will remain in full force and effect. A waiver
+    by either party of any term or condition of this Agreement or any
+    breach thereof, in any one instance, will not waive such term or
+    condition or any subsequent breach thereof. You may assign your
+    rights under this Agreement to any party that consents to, and
+    agrees to be bound by, its terms and conditions; Owner may assign
+    its rights under this Agreement without condition. This Agreement
+    will be binding upon and will inure to the benefit of the parties,
+    their successors and permitted assigns.</li>
+
+</ol>
+
+<p><a href="http://creativecommons.org/licenses/by-sa/3.0/"
+rel="license"><img src="http://creativecommons.org/images/public/somerights20"
+alt="Creative Commons License" align="right" border="0" /></a> Thanks
+to <a href="http://wordpress.com/">Automattic, Inc</a> for their great
+Terms of Service template, which they make available under the
+Creative Commons Sharealike 3.0 license.</p>
+
+
