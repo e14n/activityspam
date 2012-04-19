@@ -17,10 +17,10 @@
 
 <h3>Terms of Service</h3>
 
-<p>The following terms and conditions govern all use of the <%- site
-  %> website and all content, services and products available at or
-  through the website. The Service is owned and operated by <%- owner
-  %> (“Owner”). The Service is offered subject to your acceptance
+<p>The following terms and conditions govern all use of the <%- site %>
+  website and all content, services and products available at or
+  through the website. The Service is owned and operated by <%- owner %>
+  (“Owner”). The Service is offered subject to your acceptance
   without modification of all of the terms and conditions contained
   herein and all other operating rules, policies (including, without
   limitation, <a href="/privacy/">Owner’s Privacy Policy</a>) and
@@ -84,7 +84,7 @@
       <li><strong>General Terms. </strong><br />
 
 	Optional paid services are or will be available on the Service
-	(any such services, an &#8220;Upgrade&#8221;). By selecting an
+	(any such services, an &quot;Upgrade&quot;). By selecting an
 	Upgrade you agree to pay Owner the monthly or annual
 	subscription fees indicated for that service. Payments will be
 	charged on a pre-pay basis on the day you sign up for an
@@ -101,7 +101,7 @@
 	subscription fee for such Upgrade (as well as any taxes) using
 	any credit card or other payment mechanism we have on record
 	for you. Upgrades can be canceled at any time in the Upgrades
-	section of your site&#8217;s dashboard.</li>
+	section of your site&apos;s dashboard.</li>
 
     </ul>
 
@@ -140,7 +140,7 @@
     liability.</li>
 
   <li><strong>Disclaimer of Warranties.</strong> The Service is
-    provided &#8220;as is&#8221;. Owner and its suppliers and licensors
+    provided &quot;as is&quot;. Owner and its suppliers and licensors
     hereby disclaim all warranties of any kind, express or implied,
     including, without limitation, the warranties of merchantability,
     fitness for a particular purpose and non-infringement. Neither Owner
