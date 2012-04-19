@@ -26,11 +26,13 @@
   privacy regarding any information we may collect while operating our
   websites.</p>
 
-<h3>API data</h3>
+<h3>API submissions</h3>
 
 <p>All calls to the API are or may be logged for auditing purposes,
   including API key of caller, timestamp, originating IP address of
   the request, and an opaque one-way hash of the data submitted.</p>
+
+<p>Data submit for testing will not be stored.</p>
 
 <p>The quality of <%- site %> classification depends on the collective
   intelligence of all users. Data submit for training will be combined
@@ -43,11 +45,9 @@
   (see below) and not re-published or shared with other users or third
   parties.</p>
 
-<p>Data submit for testing will not be stored.</p>
-
-<p>Training data will <strong>not</strong> be deleted when the user
-  account is deleted by default. You can make a special request at
-  deletion time of your account.</p>
+<p>Training data will by default <strong>not</strong> be deleted when
+  the user account is deleted. Users can make a special request at
+  account deletion time.</p>
 
 <h3>Website Visitors</h3>
 
