@@ -26,8 +26,12 @@ exports.index = function(req, res, next) {
     res.render('index', { title: 'Home' });
 };
 
-exports.index = function(req, res, next) {
+exports.tos = function(req, res, next) {
     res.render('tos', { title: 'Terms of Service' });
+};
+
+exports.privacy = function(req, res, next) {
+    res.render('privacy', { title: 'Privacy Policy' });
 };
 
 exports.api = function(req, res, next) {

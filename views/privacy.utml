@@ -1,0 +1,165 @@
+<h2>Privacy Policy</h2>
+
+<p class="statement">Your privacy and the privacy of your users is
+  critically important to us. At <%- owner %> we have a few fundamental
+  principles:</p>
+
+<ul>
+
+  <li>We don&#8217;t ask you for data unless we truly
+    need it.</li>
+
+  <li>We don&#8217;t share your data with anyone except to comply with
+    the law, develop our products, or protect our rights.</li>
+
+  <li>We don&#8217;t store personal information on our servers unless
+    required for the on-going operation of one of our services.</li>
+
+</ul>
+
+<p>Below is our privacy policy which incorporates these goals. If you
+  have questions about deleting or correcting your personal data
+  please <a href="/contact">contact us</a>.</p>
+
+<p><%- owner %> (“<strong>Owner</strong>”) operates <%- site >
+  (“<strong>Service</strong>”). It is Owner’s policy to respect your
+  privacy regarding any information we may collect while operating our
+  websites.</p>
+
+<h3>API data</h3>
+
+<p>All calls to the API are or may be logged for auditing purposes,
+  including API key of caller, timestamp, originating IP address of
+  the request, and an opaque one-way hash of the data submitted.</p>
+
+<p>The quality of <%- site %> classification depends on the collective
+  intelligence of all users. Data submit for training will be combined
+  with data submitted by other users into aggregate structures to
+  improve the machine learning of the service.</p>
+
+<p>Data submit for training will be stored in its original form for
+  auditing and for re-training in case of future algorithm changes. It
+  will be treated as potentially personally-identifying information
+  (see below) and not re-published or shared with other users or third
+  parties.</p>
+
+<p>Data submit for testing will not be stored.</p>
+
+<p>Training data will <strong>not</strong> be deleted when the user
+  account is deleted by default. You can make a special request at
+  deletion time of your account.</p>
+
+<h3>Website Visitors</h3>
+
+<p>Like most website operators, Owner collects
+  non-personally-identifying information of the sort that web browsers
+  and servers typically make available, such as the browser type,
+  language preference, referring site, and the date and time of each
+  visitor request. Owner&#8217;s purpose in collecting non-personally
+  identifying information is to better understand how Owner&#8217;s
+  visitors use its website. From time to time, Owner may release
+  non-personally-identifying information in the aggregate, e.g., by
+  publishing a report on trends in the usage of its website.</p>
+
+<p>Owner also collects potentially personally-identifying information
+  like Internet Protocol (IP) addresses for logged in users. Owner
+  only discloses logged in user IP addresses under the same
+  circumstances that it uses and discloses personally-identifying
+  information as described below.</p>
+
+<h3>Gathering of Personally-Identifying Information</h3>
+
+<p>Certain visitors to Owner’s websites choose to interact with Owner
+  in ways that require Owner to gather personally-identifying
+  information. The amount and type of information that Owner gathers
+  depends on the nature of the interaction. For example, we ask
+  visitors who sign up for an account to provide a username and email
+  address. Those who engage in transactions with Owner – by purchasing
+  an upgrade, for example – are asked to provide additional
+  information, including as necessary the personal and financial
+  information required to process those transactions. In each case,
+  Owner collects such information only insofar as is necessary or
+  appropriate to fulfill the purpose of the visitor’s interaction with
+  Owner. Owner does not disclose personally-identifying information
+  other than as described below. And visitors can always refuse to
+  supply personally-identifying information, with the caveat that it
+  may prevent them from engaging in certain website-related
+  activities.</p>
+
+<h3>Aggregated Statistics</h3>
+
+<p>Owner may collect statistics about the behavior of visitors to its
+  websites. Owner may display this information publicly or
+  provide it to others. However, Owner does not disclose
+  personally-identifying information other than as described below.</p>
+
+<h3>Protection of Certain Personally-Identifying Information</h3>
+
+<p>Owner discloses potentially personally-identifying and
+  personally-identifying information only to those of its employees,
+  contractors and affiliated organizations that (i) need to know that
+  information in order to process it on Owner’s behalf or to provide
+  services available at Owner’s websites, and (ii) that have agreed not
+  to disclose it to others. Some of those employees, contractors and
+  affiliated organizations may be located outside of your home country;
+  by using Owner’s websites, you consent to the transfer of such
+  information to them. Owner will not rent or sell potentially
+  personally-identifying and personally-identifying information to
+  anyone. Other than to its employees, contractors and affiliated
+  organizations, as described above, Owner discloses potentially
+  personally-identifying and personally-identifying information only in
+  response to a subpoena, court order or other governmental request, or
+  when Owner believes in good faith that disclosure is reasonably
+  necessary to protect the property or rights of Owner, third parties or
+  the public at large. If you are a registered user of Service
+  and have supplied your email address, Owner may occasionally send you
+  an email to tell you about new features, solicit your feedback, or
+  just keep you up to date with what’s going on with Owner and our
+  products. We primarily use our various product blogs to communicate
+  this type of information, so we expect to keep this type of email to a
+  minimum. If you send us a request (for example via a support email or
+  via one of our feedback mechanisms), we reserve the right to publish
+  it in order to help us clarify or respond to your request or to help
+  us support other users. Owner takes all measures reasonably necessary
+  to protect against the unauthorized access, use, alteration or
+  destruction of potentially personally-identifying and
+  personally-identifying information.</p>
+
+<h3>Cookies</h3>
+
+<p>A cookie is a string of information that a website stores on a
+  visitor’s computer, and that the visitor’s browser provides to the
+  website each time the visitor returns. Owner uses cookies to help
+  Owner identify and track visitors, their usage of Owner website, and
+  their website access preferences. Website visitors who do not wish to
+  have cookies placed on their computers should set their browsers to
+  refuse cookies before using Owner’s websites, with the drawback that
+  certain features of Owner’s websites may not function properly without
+  the aid of cookies.</p>
+
+<h3>Business Transfers</h3>
+
+<p>If Owner, or substantially all of its assets, were acquired, or in
+  the unlikely event that Owner goes out of business or enters
+  bankruptcy, user information would be one of the assets that is
+  transferred or acquired by a third party. You acknowledge that such
+  transfers may occur, and that any acquirer of Owner may continue to
+  use your personal information as set forth in this policy.</p>
+
+<h3>Privacy Policy Changes</h3>
+
+<p>Although most changes are likely to be minor, Owner may change its
+  Privacy Policy from time to time, and in Owner’s sole
+  discretion. Owner encourages visitors to frequently check this page
+  for any changes to its Privacy Policy. If you have a Service
+  account, you should also check your blog’s dashboard for alerts to
+  these changes. Your continued use of this site after any change in
+  this Privacy Policy will constitute your acceptance of such
+  change.</p>
+
+<p><a href="http://creativecommons.org/licenses/by-sa/3.0/"
+      rel="license"><img src="http://creativecommons.org/images/public/somerights20"
+			 alt="Creative Commons License" align="right" border="0" /></a> Thanks
+  to <a href="http://wordpress.com/">Automattic, Inc</a> for their great
+  Privacy Policy template, which they make available under the
+  Creative Commons Sharealike 3.0 license.</p>

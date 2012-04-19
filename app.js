@@ -165,6 +165,8 @@ var webSite = [
 
 app.get('/', webSite, web.index);
 app.get('/api', webSite, web.api);
+app.get('/tos', webSite, web.tos);
+app.get('/privacy', webSite, web.privacy);
 
 app.get('/login', webSite, notLoggedIn, web.loginForm);
 app.post('/login', webSite, notLoggedIn, web.login);
