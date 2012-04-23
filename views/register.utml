@@ -10,20 +10,21 @@
       <label class="control-label" for="username">Email</label>
       <div class="controls">
         <input type="text" class="input-medium" id="email" name="email" />
+	<p class="help-block">An email address we can use to contact you.</p>
       </div>
-      <p class="help-block">An email address we can use to contact you.</p>
     </div>
     <div class="control-group">
       <label class="control-label" for="password">Password</label>
       <div class="controls">
         <input type="password" class="input-medium" id="password" name="password" />
+	<p class="help-block">A password; make it good!</p>
       </div>
-      <p class="help-block">A password; make it good!</p>
     </div>
     <div class="control-group">
-      <label class="control-label" for="confirm">Confirm</label>
+      <label class="control-label" for="confirm">Repeat</label>
       <div class="controls">
         <input type="password" class="input-medium" id="confirm" name="confirm" />
+	<p class="help-block">Type it again so we know you know it.</p>
       </div>
     </div>
     <div class="control-group">
