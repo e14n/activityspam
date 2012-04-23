@@ -39,6 +39,7 @@ exports.thisIsSpam = function(req, res, next) {
             if (err) {
                 res.json({error: err.message}, 500);
             } else {
+                delete trainrec.app;
                 res.json(trainrec);
             }
         });
@@ -65,6 +66,7 @@ exports.thisIsHam = function(req, res, next) {
             if (err) {
                 res.json({error: err.message}, 500);
             } else {
+                delete trainrec.app;
                 res.json(trainrec);
             }
         });
