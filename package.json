@@ -4,14 +4,17 @@
     "dependencies": { "connect": "1.x",
 		      "express": "*",
 		      "connect-auth": ">= 0.5.1",
-                      "databank": "0.x",
+                      "databank": "0.14.x",
 		      "dateformat": "1.x",
 		      "bcrypt": "*",
                       "underscore": "*",
 		      "utml": "*",
                       "step": "*",
 		      "oauth": "*",
-                      "optimist": ">= 0.3.1" }
+                      "optimist": ">= 0.3.1" 
+                    },
+    "devDependencies": {
+        "vows"    :  "*",
+        "api-easy" : "*"
+    }
 }
-
-	
