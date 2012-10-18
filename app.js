@@ -33,6 +33,7 @@ var connect = require('connect'),
     api = require('./routes/api'),
     User = require('./models/user').User,
     App = require('./models/app').App,
+    DatabankStore = require('connect-databank')(connect),
     i,
     cnt,
     params,
@@ -40,7 +41,8 @@ var connect = require('connect'),
     db,
     app,
     bounce,
-    useHTTPS;
+    useHTTPS,
+    dbstore;
 
 if (cluster.isMaster) {
     cnt = config.children || (os.cpus().length - 1);
@@ -59,8 +61,11 @@ if (cluster.isMaster) {
     _.extend(params.schema, SpamFilter.schema);
     _.extend(params.schema, User.schema);
     _.extend(params.schema, App.schema);
+    _.extend(params.schema, DatabankStore.schema);
 
     db = Databank.get(config.driver, params);
+
+    dbstore = new DatabankStore(db);
 
     // Create app
     // XXX: why won't this run in the configure section?
@@ -88,7 +93,8 @@ if (cluster.isMaster) {
         app.set('view engine', 'utml');
         app.use(express.logger());
         app.use(express.cookieParser());
-        app.use(express.session({ secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure" }));
+        app.use(express.session({ secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure",
+				  store: dbstore}));
         app.use(auth([auth.Oauth({oauth_provider: new Provider(),
                                   oauth_protocol: (useHTTPS) ? 'https' : 'http',
                                   authenticate_provider: null,
