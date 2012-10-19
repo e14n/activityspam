@@ -22,6 +22,7 @@ var connect = require('connect'),
     fs = require('fs'),
     os = require('os'),
     cluster = require('cluster'),
+    Logger = require('bunyan'),
     Databank = databank.Databank,
     DatabankObject = databank.DatabankObject,
     NoSuchThingError = databank.NoSuchThingError,
@@ -42,6 +43,9 @@ var connect = require('connect'),
     app,
     bounce,
     useHTTPS,
+    log,
+    logfile,
+    loglevel,
     dbstore;
 
 if (cluster.isMaster) {
@@ -65,7 +69,17 @@ if (cluster.isMaster) {
 
     db = Databank.get(config.driver, params);
 
-    dbstore = new DatabankStore(db);
+    // Log
+
+    logfile = config.logfile || "/var/log/activityspam.log";
+    loglevel = config.loglevel || "info";
+
+    log = new Logger({name: 'activityspam',
+		      stream: {
+			  level: loglevel,
+			  path: logfile}});
+
+    dbstore = new DatabankStore(db, log);
 
     // Create app
     // XXX: why won't this run in the configure section?
@@ -93,8 +107,8 @@ if (cluster.isMaster) {
         app.set('view engine', 'utml');
         app.use(express.logger());
         app.use(express.cookieParser());
-        app.use(express.session({ secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure",
-				  store: dbstore}));
+        app.use(express.session({secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure",
+				 store: dbstore}));
         app.use(auth([auth.Oauth({oauth_provider: new Provider(),
                                   oauth_protocol: (useHTTPS) ? 'https' : 'http',
                                   authenticate_provider: null,
