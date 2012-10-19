@@ -12,10 +12,10 @@
                       "step": "*",
 		      "oauth": "*",
                       "optimist": ">= 0.3.1",
-		      "connect-databank": "0.1.x"
+		      "connect-databank": "0.3.x",
+		      "bunyan": "0.14.x"
                     },
     "devDependencies": {
-        "vows"    :  "*",
-        "api-easy" : "*"
+        "vows"    :  "0.6.x"
     }
 }

@@ -46,6 +46,7 @@ var connect = require('connect'),
     log,
     logfile,
     loglevel,
+    cleanup,
     dbstore;
 
 if (cluster.isMaster) {
@@ -79,7 +80,11 @@ if (cluster.isMaster) {
 			  level: loglevel,
 			  path: logfile}});
 
-    dbstore = new DatabankStore(db, log);
+    // Session store
+
+    cleanup = config.cleanup || 600000;
+
+    dbstore = new DatabankStore(db, log, cleanup);
 
     // Create app
     // XXX: why won't this run in the configure section?
