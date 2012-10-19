@@ -47,6 +47,8 @@ var connect = require('connect'),
     logfile,
     loglevel,
     cleanup,
+    weblog,
+    requestLogger,
     dbstore;
 
 if (cluster.isMaster) {
@@ -76,6 +78,10 @@ if (cluster.isMaster) {
     loglevel = config.loglevel || "info";
 
     log = new Logger({name: 'activityspam',
+		      serializers: {
+			  req: Logger.stdSerializers.req,
+			  res: Logger.stdSerializers.res
+		      },
 		      streams: [{
 			  level: loglevel,
 			  path: logfile}]});
@@ -105,12 +111,29 @@ if (cluster.isMaster) {
         app = express.createServer();
     }
 
+    weblog = log.child({component: "web"});
+
+    // Hook the end of the response and log immediately afterwards
+
+    requestLogger = function(req, res, next) {
+
+	var end = res.end;
+
+	res.end = function(chunk, encoding) {
+            res.end = end;
+            res.end(chunk, encoding);
+            weblog.info({req: req, res: res});
+	};
+
+	next();
+    };
+
     // Configuration
 
     app.configure(function() {
         app.set('views', __dirname + '/views');
         app.set('view engine', 'utml');
-        app.use(express.logger());
+        app.use(requestLogger);
         app.use(express.cookieParser());
         app.use(express.session({secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure",
 				 store: dbstore}));
@@ -234,6 +257,7 @@ if (cluster.isMaster) {
     app.post('/tokenize', api.testTokenize);
 
     app.error(function(err, req, res) {
+        log.error(err);
         res.render('error', {err: err});
     });
 
@@ -250,7 +274,7 @@ if (cluster.isMaster) {
 
     db.connect({}, function(err) {
         if (err) {
-            console.error(err);
+	    log.error(err);
         } else {
 
             SpamFilter.db = db;
