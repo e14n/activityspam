@@ -76,9 +76,9 @@ if (cluster.isMaster) {
     loglevel = config.loglevel || "info";
 
     log = new Logger({name: 'activityspam',
-		      stream: {
+		      streams: [{
 			  level: loglevel,
-			  path: logfile}});
+			  path: logfile}]});
 
     // Session store
 
