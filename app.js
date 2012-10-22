@@ -134,9 +134,6 @@ if (cluster.isMaster) {
         app.set('views', __dirname + '/views');
         app.set('view engine', 'utml');
         app.use(requestLogger);
-        app.use(express.cookieParser());
-        app.use(express.session({secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure",
-				 store: dbstore}));
         app.use(auth([auth.Oauth({oauth_provider: new Provider(),
                                   oauth_protocol: (useHTTPS) ? 'https' : 'http',
                                   authenticate_provider: null,
@@ -220,7 +217,8 @@ if (cluster.isMaster) {
 
     var webSite = [
         express.cookieParser(),
-        express.session({ secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure" }),
+        express.session({secret: (_(config).has('sessionSecret')) ? config.sessionSecret : "insecure",
+			 store: dbstore}),
         express.methodOverride(),
         sessionUser
     ];
