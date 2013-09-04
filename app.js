@@ -275,6 +275,7 @@ if (cluster.isMaster) {
     db.connect({}, function(err) {
         if (err) {
 	    log.error(err);
+            process.exit(1);
         } else {
 
             SpamFilter.db = db;
@@ -288,6 +289,15 @@ if (cluster.isMaster) {
                     process.setuid(config.serverUser);
                 });
             }
+
+            app.on("error", function(err) {
+	        log.error(err);
+                process.exit(1);
+            });
+
+            app.on("listening", function() {
+	        log.info({address: address}, "Listening");
+            });
 
             if (useHTTPS) {
                 app.listen(config.httpsPort || 443, address);
