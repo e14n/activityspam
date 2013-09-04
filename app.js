@@ -270,6 +270,8 @@ if (cluster.isMaster) {
         }
     }
 
+    var address = config.address || config.hostname || "localhost";
+
     db.connect({}, function(err) {
         if (err) {
 	    log.error(err);
@@ -288,10 +290,10 @@ if (cluster.isMaster) {
             }
 
             if (useHTTPS) {
-                app.listen(config.httpsPort || 443, config.hostname || "localhost");
-                bounce.listen(config.port || 80, config.hostname || "localhost");
+                app.listen(config.httpsPort || 443, address);
+                bounce.listen(config.port || 80, address);
             } else {
-                app.listen(config.port || 80, config.hostname || "localhost");
+                app.listen(config.port || 80, address);
             }
         }
     });
