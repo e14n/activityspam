@@ -52,7 +52,7 @@ var connect = require('connect'),
     dbstore;
 
 if (cluster.isMaster) {
-    cnt = config.children || (os.cpus().length - 1);
+    cnt = config.children || Math.max(1, (os.cpus().length - 1));
     for (i = 0; i < cnt; ++i) {
         cluster.fork();
     }
