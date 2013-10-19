@@ -56,6 +56,13 @@ if (cluster.isMaster) {
     for (i = 0; i < cnt; ++i) {
         cluster.fork();
     }
+    // Restart child processes when they die
+
+    cluster.on('exit', function(worker, code, signal) {
+        var exitCode = worker.process.exitCode;
+        console.error('worker ' + worker.process.pid + ' died ('+exitCode+'). restarting...');
+        cluster.fork();
+    });
 } else { 
     // Setup database
 
